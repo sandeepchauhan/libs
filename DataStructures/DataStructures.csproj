@@ -7,8 +7,8 @@
     <ProjectGuid>{3CEA7758-9255-4821-A43E-6914FB1B626B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Learning.Lib.DataStructures</RootNamespace>
-    <AssemblyName>Learning.Lib.DataStructures</AssemblyName>
+    <RootNamespace>Learning.Libs.DataStructures</RootNamespace>
+    <AssemblyName>Learning.Libs.DataStructures</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IStringDictionary.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

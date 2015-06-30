@@ -7,8 +7,8 @@
     <ProjectGuid>{3671937C-8219-4F12-B531-FC0C5C2E272A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtensionMethods</RootNamespace>
-    <AssemblyName>ExtensionMethods</AssemblyName>
+    <RootNamespace>Learning.Libs.ExtensionMethods</RootNamespace>
+    <AssemblyName>Learning.Libs.ExtensionMethods</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

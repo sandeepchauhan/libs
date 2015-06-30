@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Learning.Lib.ExtensionMethods;
+using Learning.Libs.ExtensionMethods;
+using Learning.Libs.DataStructures.Interfaces;
 
-namespace Learning.Lib.DataStructures
+namespace Learning.Libs.DataStructures
 {
     /// <summary>
     /// Size coming around 46 MB with 266091 nodes.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class Trie<T>
+    public class Trie<T> : IStringDictionary<T>
     {
         private List<Tuple<string, T>> _dataList = new List<Tuple<string, T>>();
 
@@ -79,7 +80,7 @@ namespace Learning.Lib.DataStructures
             return retVal;
         }
 
-        public List<string> GetSuggestions(string word)
+        public IEnumerable<string> GetSuggestions(string word)
         {
             Node currNode = _rootNode;
             char[] arr = word.ToArray();
@@ -153,6 +154,11 @@ namespace Learning.Lib.DataStructures
                 currNode = currNode.childNodes[index];
             }
 
+            if (wordAlreadyPresent && currNode.ListIndex == -1)
+            {
+                wordAlreadyPresent = false;
+            }
+
             if (!wordAlreadyPresent)
             {
                 _dataList.Add(new Tuple<string, T>(word, data));
@@ -165,6 +171,19 @@ namespace Learning.Lib.DataStructures
         public int GetNumNodes()
         {
             return Node.InstanceCount;
+        }
+
+        public int GetNumWords()
+        {
+            return _dataList.Count;
+        }
+
+        public string GetStats()
+        {
+            string stats = "Trie";
+            stats += "\n" + "Number of words: " + GetNumWords();
+            stats += "\n" + "Number of nodes: " + GetNumNodes();
+            return stats;
         }
     }
 }
