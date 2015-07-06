@@ -39,15 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomString.cs" />
+    <Compile Include="HashTable.cs" />
     <Compile Include="Interfaces\IStringDictionary.cs" />
+    <Compile Include="LinkedList.cs" />
+    <Compile Include="StringHashTable.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExtensionMethods\ExtensionMethods.csproj">
-      <Project>{3671937c-8219-4f12-b531-fc0c5c2e272a}</Project>
-      <Name>ExtensionMethods</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

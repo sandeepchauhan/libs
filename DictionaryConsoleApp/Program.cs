@@ -14,6 +14,7 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
+            bool isPrime = IsPrime(4111);
             DictionarySanitizer.WriteSanitizedDictionary();
             Trie<string> trieDictionary = TrieDictionary.Populate();
             while (true)
@@ -44,6 +45,21 @@ namespace DictionaryConsoleApp
             //        Console.WriteLine("No suggestions found!");
             //    }
             //}
+        }
+
+        public static bool IsPrime(int number)
+        {
+            int boundary = (int) Math.Floor(Math.Sqrt(number));
+
+            if (number == 1) return false;
+            if (number == 2) return true;
+
+            for (int i = 2; i <= boundary; ++i)
+            {
+                if (number % i == 0) return false;
+            }
+
+            return true;
         }
     }
 }
