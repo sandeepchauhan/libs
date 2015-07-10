@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Learning.Libs.DataStructures
 {
-    public class LinkedList<T> : IEnumerable<T>
+    public class LinkedList<T> : IEnumerable<T> where T : IComparable<T>
     {
         private class Node
         {
@@ -97,11 +97,36 @@ namespace Learning.Libs.DataStructures
             }
         }
 
+        private class FunctionCost
+        {
+            public int NumComparisons;
+
+            public int NumPropertyAccesses;
+        }
+
+        private class SortingStatistics
+        {
+            public List<FunctionCost> MergeSortCosts = new List<FunctionCost>();
+
+            public List<FunctionCost> MidCosts = new List<FunctionCost>();
+
+            public List<FunctionCost> MergeCosts = new List<FunctionCost>();
+
+            public void Print()
+            {
+                Console.WriteLine("Num MergeSort calls: " + MergeSortCosts.Count);
+                Console.WriteLine("Num Mid calls: " + MidCosts.Count);
+                Console.WriteLine("Num Merge calls: " + MergeCosts.Count);
+            }
+        }
+
         private Node _head;
 
         private Node _tail;
 
         private int _length;
+
+        private SortingStatistics _sortingStats;
 
         public void Add(T data)
         {
@@ -125,6 +150,160 @@ namespace Learning.Libs.DataStructures
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void Sort(SortingAlgorithm sortingAlgorithm)
+        {
+            _sortingStats = new SortingStatistics();
+            switch(sortingAlgorithm)
+            {
+                case SortingAlgorithm.MergeSort:
+                    this._head = MergeSort(_head);
+                    _sortingStats.Print();
+                    break;
+            }
+        }
+
+        private Node MergeSort(Node head)
+        {
+            FunctionCost funcCost = new FunctionCost();
+            funcCost.NumComparisons++;
+            _sortingStats.MergeSortCosts.Add(funcCost);
+            if (head.Next != null)
+            {
+                Node mid = Mid(head);
+                Node l1 = head;
+                if (l1.Next != null)
+                {
+                    l1 =  MergeSort(head);
+                }
+                Node l2 = mid;
+                if (l2.Next != null)
+                {
+                    l2 = MergeSort(mid);
+                }
+                return Merge(l1, l2);
+            }
+            else
+            {
+                return head;
+            }
+        }
+
+        private Node Mid(Node head)
+        {
+            FunctionCost funcCost = new FunctionCost();
+            Node slowPtr = head;
+            Node fastPtr = head.Next.Next;
+            funcCost.NumPropertyAccesses += 2;
+            funcCost.NumComparisons++;
+            if (fastPtr != null)
+            {
+                while (true)
+                {
+                    funcCost.NumPropertyAccesses += 3;
+                    funcCost.NumComparisons += 2;
+                    if (fastPtr.Next == null || fastPtr.Next.Next == null)
+                    {
+                        break;
+                    }
+                    slowPtr = slowPtr.Next;
+                    fastPtr = fastPtr.Next.Next;
+                    funcCost.NumPropertyAccesses += 3;
+                }
+            }
+
+            Node tmp = slowPtr;
+            slowPtr = slowPtr.Next;
+            tmp.Next = null;
+            funcCost.NumPropertyAccesses += 2;
+            _sortingStats.MidCosts.Add(funcCost);
+            return slowPtr;
+        }
+
+        private Node Merge(Node head1, Node head2)
+        {
+            FunctionCost funcCost = new FunctionCost();
+            _sortingStats.MergeCosts.Add(funcCost);
+            funcCost.NumComparisons++;
+            if (head2 == null)
+            {
+                return head1;
+            }
+            funcCost.NumComparisons++;
+            if (head1 == null)
+            {
+                return head2;
+            }
+
+            Node retListHead = head1;
+            funcCost.NumPropertyAccesses++;
+            Node current1 = head1.Next;
+            Node current2 = head2;
+            bool onList1 = true;
+            funcCost.NumComparisons++;
+            if (head2.Data.CompareTo(head1.Data) < 0)
+            {
+                retListHead = head2;
+                current1 = head1;
+                funcCost.NumPropertyAccesses++;
+                current2 = head2.Next;
+                onList1 = false;
+            }
+            Node retListTail = retListHead;
+            while(current1 != null && current2 != null)
+            {
+                funcCost.NumComparisons += 3;
+                if (onList1)
+                {
+                    funcCost.NumComparisons++;
+                    if (current2.Data.CompareTo(current1.Data) < 0)
+                    {
+                        retListTail.Next = current2;
+                        retListTail = current2;
+                        funcCost.NumPropertyAccesses++;
+                        current2 = current2.Next;
+                        onList1 = false;
+                    }
+                    else
+                    {
+                        retListTail = current1;
+                        funcCost.NumPropertyAccesses++;
+                        current1 = current1.Next;
+                    }
+                }
+                else
+                {
+                    funcCost.NumComparisons++;
+                    if (current1.Data.CompareTo(current2.Data) < 0)
+                    {
+                        retListTail.Next = current1;
+                        retListTail = current1;
+                        funcCost.NumPropertyAccesses++;
+                        current1 = current1.Next;
+                        onList1 = true;
+                    }
+                    else
+                    {
+                        retListTail = current2;
+                        funcCost.NumPropertyAccesses++;
+                        current2 = current2.Next;
+                    }
+                }
+            }
+            if (current1 != null || current2 != null)
+            {
+                if (current1 != null)
+                {
+                    retListTail.Next = current1;
+                }
+                else
+                {
+                    retListTail.Next = current2;
+                }
+            }
+
+            return retListHead;
         }
     }
 }

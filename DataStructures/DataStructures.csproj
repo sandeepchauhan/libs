@@ -43,6 +43,7 @@
     <Compile Include="HashTable.cs" />
     <Compile Include="Interfaces\IStringDictionary.cs" />
     <Compile Include="LinkedList.cs" />
+    <Compile Include="SortingAlgorithm.cs" />
     <Compile Include="StringHashTable.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,6 +14,15 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
+            Learning.Libs.DataStructures.LinkedList<int> list = new Learning.Libs.DataStructures.LinkedList<int>();
+            list.Add(3);
+            list.Add(1);
+            list.Sort(SortingAlgorithm.MergeSort);
+            foreach(int i in list)
+            {
+                Console.WriteLine(i);
+            }
+
             bool isPrime = IsPrime(4111);
             DictionarySanitizer.WriteSanitizedDictionary();
             Trie<string> trieDictionary = TrieDictionary.Populate();
