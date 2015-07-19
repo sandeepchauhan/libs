@@ -155,13 +155,60 @@ namespace Learning.Libs.DataStructures
         public void Sort(SortingAlgorithm sortingAlgorithm)
         {
             _sortingStats = new SortingStatistics();
-            switch(sortingAlgorithm)
+            if (this._head != null && this._head.Next != null)
             {
-                case SortingAlgorithm.MergeSort:
-                    this._head = MergeSort(_head);
-                    _sortingStats.Print();
-                    break;
+                switch (sortingAlgorithm)
+                {
+                    case SortingAlgorithm.MergeSort:
+                        this._head = MergeSort(_head);
+                        break;
+                    case SortingAlgorithm.SelectionSort:
+                        this._head = SelectionSort(_head);
+                        break;
+                }
             }
+            _sortingStats.Print();
+        }
+
+        private Node SelectionSort(Node head)
+        { 
+            Node retListHead = null;
+            Node retListTail = null;
+            Node remListHead = head;
+            while (remListHead != null)
+            {
+                Node minDataNode = remListHead;
+                Node minDataNodePrev = null;
+                Node current = remListHead;
+                while (current.Next != null)
+                {
+                    if (current.Next.Data.CompareTo(minDataNode.Data) < 0)
+                    {
+                        minDataNode = current.Next;
+                        minDataNodePrev = current;
+                    }
+                    current = current.Next;
+                }
+                if (minDataNodePrev == null)
+                {
+                    remListHead = minDataNode.Next;
+                }
+                else
+                {
+                    minDataNodePrev.Next = minDataNode.Next;
+                }
+                minDataNode.Next = null;
+                if (retListTail == null)
+                {
+                    retListHead = retListTail = minDataNode;
+                }
+                else
+                {
+                    retListTail.Next = minDataNode;
+                    retListTail = retListTail.Next;
+                }
+            }
+            return retListHead;
         }
 
         private Node MergeSort(Node head)
