@@ -157,17 +157,41 @@ namespace Learning.Libs.DataStructures
             _sortingStats = new SortingStatistics();
             if (this._head != null && this._head.Next != null)
             {
-                switch (sortingAlgorithm)
+                case SortingAlgorithm.MergeSort:
+                    this._head = MergeSort(this._head);
+                    _sortingStats.Print();
+                    break;
+                case SortingAlgorithm.InsertionSort:
+                    this._head = InsertionSort(this._head);
+                    break;
+            }
+        }
+
+        private Node SelectionSort(Node head)
+        {
+            if (head == null || head.Next == null)
+            {
+                return head;
+            }
+
+            Node sortedListStart = null;
+            Node sortedListEnd = null;
+            Node remListStart = head;
+            while (remListStart != null)
+            {
+                Node minNode = remListStart;
+                Node current = remListStart.Next;
+                while (current != null)
                 {
-                    case SortingAlgorithm.MergeSort:
-                        this._head = MergeSort(_head);
-                        break;
-                    case SortingAlgorithm.SelectionSort:
-                        this._head = SelectionSort(_head);
-                        break;
-                    case SortingAlgorithm.QuickSort:
-                        this._head = QuickSort(_head).Item1;
-                        break;
+                    if (current.Data.CompareTo(minNode.Data) < 0)
+                    {
+                        minNode = current;
+                    }
+                    current = current.Next;
+                }
+                if (sortedListStart == null)
+                {
+
                 }
             }
             _sortingStats.Print();
@@ -292,6 +316,49 @@ namespace Learning.Libs.DataStructures
                     retListTail.Next = minDataNode;
                     retListTail = retListTail.Next;
                 }
+            }
+            return retListHead;
+        }
+
+        private Node InsertionSort(Node head)
+        {
+            Node retListHead = head;
+            Node current = head.Next, currentPrevious = head;
+            int retListLen = 1;
+            while (current != null)
+            {
+                Node iterationPtr = retListHead, iterationPrevPtr = null;
+                bool alreadyCorrectPos = true;
+                for (int i = 0; i < retListLen; i++)
+                {
+                    if (iterationPtr.Data.CompareTo(current.Data) > 0)
+                    {
+                        currentPrevious.Next = current.Next;
+                        current.Next = iterationPtr;
+                        if (iterationPrevPtr == null)
+                        {
+                            retListHead = current;
+                        }
+                        else
+                        {
+                            iterationPrevPtr.Next = current;
+                        }
+                        alreadyCorrectPos = false;
+                        break;
+                    }
+                    iterationPrevPtr = iterationPtr;
+                    iterationPtr = iterationPtr.Next;
+                }
+                if (alreadyCorrectPos)
+                {
+                    currentPrevious = current;
+                    current = current.Next;
+                }
+                else
+                {
+                    current = currentPrevious.Next;
+                }
+                retListLen++;
             }
             return retListHead;
         }
