@@ -17,7 +17,16 @@ namespace DictionaryConsoleApp
             Learning.Libs.DataStructures.LinkedList<int> list = new Learning.Libs.DataStructures.LinkedList<int>();
             list.Add(3);
             list.Add(1);
-            list.Sort(SortingAlgorithm.MergeSort);
+            list.Add(11);
+            list.Add(10);
+            list.Add(111);
+            list.Add(101);
+            list.Add(91);
+            list.Add(19);
+            list.Add(-1);
+            list.Add(1000);
+            list.Add(13);
+            list.Sort(SortingAlgorithm.InsertionSort);
             foreach(int i in list)
             {
                 Console.WriteLine(i);
