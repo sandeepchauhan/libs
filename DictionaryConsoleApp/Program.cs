@@ -23,7 +23,7 @@ namespace DictionaryConsoleApp
             list.Add(19);
             list.Add(-1);
             //list.Sort(SortingAlgorithm.MergeSort);
-            list.Sort(SortingAlgorithm.SelectionSort);
+            list.Sort(SortingAlgorithm.QuickSort);
             foreach(int i in list)
             {
                 Console.WriteLine(i);

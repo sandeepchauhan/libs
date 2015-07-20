@@ -165,9 +165,94 @@ namespace Learning.Libs.DataStructures
                     case SortingAlgorithm.SelectionSort:
                         this._head = SelectionSort(_head);
                         break;
+                    case SortingAlgorithm.QuickSort:
+                        this._head = QuickSort(_head).Item1;
+                        break;
                 }
             }
             _sortingStats.Print();
+        }
+
+        private Tuple<Node, Node> QuickSort(Node head)
+        {
+            Node pivotNode = head;
+            Node current = head.Next;
+            Node leftChainHead = null, leftChainTail = null;
+            Node rightChainHead = null, rightChainTail = null;
+            #region while loop
+            while (current != null)
+            {
+                Node next = current.Next;
+                current.Next = null;
+                if (current.Data.CompareTo(pivotNode.Data) < 0)
+                {
+                    if (leftChainTail == null)
+                    {
+                        leftChainHead = leftChainTail = current;
+                    }
+                    else
+                    {
+                        leftChainTail.Next = current;
+                        leftChainTail = leftChainTail.Next;
+                    }
+                }
+                else
+                {
+                    if (rightChainTail == null)
+                    {
+                        rightChainHead = rightChainTail = current;
+                    }
+                    else
+                    {
+                        rightChainTail.Next = current;
+                        rightChainTail = rightChainTail.Next;
+                    }
+                }
+                current = next;
+            }
+            #endregion
+            Node retHead = null, retTail = null;
+            Tuple<Node, Node> leftChainSorted = null;
+            Tuple<Node, Node> rightChainSorted = null;
+            pivotNode.Next = null;
+            if (leftChainTail != null)
+            {
+                leftChainTail.Next = null;
+                leftChainSorted = QuickSort(leftChainHead);
+            }
+            if (rightChainTail != null)
+            {
+                rightChainTail.Next = null;
+                rightChainSorted = QuickSort(rightChainHead);
+            }
+            if (leftChainSorted != null)
+            {
+                retHead = leftChainSorted.Item1;
+                leftChainSorted.Item2.Next = pivotNode;
+                retTail = pivotNode;
+            }
+            else
+            {
+                retHead = pivotNode;
+                retTail = pivotNode;
+            }
+
+            if (rightChainSorted != null)
+            {
+                retTail.Next = rightChainSorted.Item1;
+                retTail = rightChainSorted.Item2;
+            }
+
+            //string s = "Sorted sequence: ";
+            //Node c = retHead;
+            //while (c != null)
+            //{
+            //    s += c.Data;
+            //    s += "*";
+            //    c = c.Next;
+            //}
+            //Console.WriteLine(s);
+            return new Tuple<Node, Node>(retHead, retTail);
         }
 
         private Node SelectionSort(Node head)
