@@ -157,41 +157,20 @@ namespace Learning.Libs.DataStructures
             _sortingStats = new SortingStatistics();
             if (this._head != null && this._head.Next != null)
             {
-                case SortingAlgorithm.MergeSort:
-                    this._head = MergeSort(this._head);
-                    _sortingStats.Print();
-                    break;
-                case SortingAlgorithm.InsertionSort:
-                    this._head = InsertionSort(this._head);
-                    break;
-            }
-        }
-
-        private Node SelectionSort(Node head)
-        {
-            if (head == null || head.Next == null)
-            {
-                return head;
-            }
-
-            Node sortedListStart = null;
-            Node sortedListEnd = null;
-            Node remListStart = head;
-            while (remListStart != null)
-            {
-                Node minNode = remListStart;
-                Node current = remListStart.Next;
-                while (current != null)
+                switch (sortingAlgorithm)
                 {
-                    if (current.Data.CompareTo(minNode.Data) < 0)
-                    {
-                        minNode = current;
-                    }
-                    current = current.Next;
-                }
-                if (sortedListStart == null)
-                {
-
+                    case SortingAlgorithm.SelectionSort:
+                        this._head = SelectionSort(this._head);
+                        break;
+                    case SortingAlgorithm.InsertionSort:
+                        this._head = InsertionSort(this._head);
+                        break;
+                    case SortingAlgorithm.MergeSort:
+                        this._head = MergeSort(this._head);
+                        break;
+                    case SortingAlgorithm.QuickSort:
+                        this._head = QuickSort(this._head).Item1;
+                        break;
                 }
             }
             _sortingStats.Print();

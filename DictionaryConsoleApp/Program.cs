@@ -15,18 +15,28 @@ namespace DictionaryConsoleApp
         static void Main(string[] args)
         {
             Learning.Libs.DataStructures.LinkedList<int> list = new Learning.Libs.DataStructures.LinkedList<int>();
-            list.Add(3);
-            list.Add(1);
-            list.Add(11);
-            list.Add(10);
-            list.Add(111);
-            list.Add(101);
-            list.Add(91);
-            list.Add(19);
-            list.Add(-1);
+            Heap<int> heap = new Heap<int>();
+            heap.Add(3);
+            heap.Add(1);
+            heap.Add(11);
+            heap.Add(10);
+            heap.Add(111);
+            heap.Add(101);
+            heap.Add(91);
+            heap.Add(19);
+            heap.Add(-1);
+            heap.Add(-11);
+            heap.Add(789);
+            heap.Add(234);
+            heap.Add(67);
+            heap.Add(890);
+            heap.Add(900);
+            heap.Add(1);
+            heap.Add(901);
             //list.Sort(SortingAlgorithm.MergeSort);
-            list.Sort(SortingAlgorithm.QuickSort);
-            foreach(int i in list)
+            //list.Sort(SortingAlgorithm.QuickSort);
+            heap.Sort();
+            foreach(int i in heap)
             {
                 Console.WriteLine(i);
             }
