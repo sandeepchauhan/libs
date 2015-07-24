@@ -39,12 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayImpl.cs" />
+    <Compile Include="ComparerImpl.cs" />
     <Compile Include="CustomString.cs" />
     <Compile Include="HashTable.cs" />
     <Compile Include="Heap.cs" />
+    <Compile Include="Interfaces\ISortableCollection.cs" />
     <Compile Include="Interfaces\IStringDictionary.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="SortingAlgorithm.cs" />
+    <Compile Include="SortingStatistics.cs" />
     <Compile Include="StringHashTable.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

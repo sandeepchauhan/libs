@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Learning.Libs.ExtensionMethods;
+using Learning.Libs.DataStructures.Interfaces;
 
 namespace DictionaryConsoleApp
 {
@@ -14,29 +15,19 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            Learning.Libs.DataStructures.LinkedList<int> list = new Learning.Libs.DataStructures.LinkedList<int>();
-            Heap<int> heap = new Heap<int>();
-            heap.Add(3);
-            heap.Add(1);
-            heap.Add(11);
-            heap.Add(10);
-            heap.Add(111);
-            heap.Add(101);
-            heap.Add(91);
-            heap.Add(19);
-            heap.Add(-1);
-            heap.Add(-11);
-            heap.Add(789);
-            heap.Add(234);
-            heap.Add(67);
-            heap.Add(890);
-            heap.Add(900);
-            heap.Add(1);
-            heap.Add(901);
+            ISortableCollection<int> collection = new ArrayImpl<int>();
+            collection.Add(2);
+            collection.Add(6);
+            collection.Add(4);
+            collection.Add(8);
+            collection.Add(1);
+            collection.Add(5);
+            collection.Add(3);
+            collection.Add(7);
             //list.Sort(SortingAlgorithm.MergeSort);
             //list.Sort(SortingAlgorithm.QuickSort);
-            heap.Sort();
-            foreach(int i in heap)
+            collection.Sort(SortingAlgorithm.MergeSort);
+            foreach(int i in collection)
             {
                 Console.WriteLine(i);
             }

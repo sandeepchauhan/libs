@@ -8,6 +8,8 @@ namespace Learning.Libs.DataStructures
 {
     public enum SortingAlgorithm
     {
+        NA,
+
         InsertionSort,
 
         SelectionSort,

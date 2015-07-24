@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Learning.Libs.DataStructures.Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Learning.Libs.DataStructures
 {
-    public class LinkedList<T> : IEnumerable<T> where T : IComparable<T>
+    public class LinkedList<T> : ISortableCollection<T> where T : IComparable<T>
     {
         private class Node
         {
@@ -97,29 +95,6 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        private class FunctionCost
-        {
-            public int NumComparisons;
-
-            public int NumPropertyAccesses;
-        }
-
-        private class SortingStatistics
-        {
-            public List<FunctionCost> MergeSortCosts = new List<FunctionCost>();
-
-            public List<FunctionCost> MidCosts = new List<FunctionCost>();
-
-            public List<FunctionCost> MergeCosts = new List<FunctionCost>();
-
-            public void Print()
-            {
-                Console.WriteLine("Num MergeSort calls: " + MergeSortCosts.Count);
-                Console.WriteLine("Num Mid calls: " + MidCosts.Count);
-                Console.WriteLine("Num Merge calls: " + MergeCosts.Count);
-            }
-        }
-
         private Node _head;
 
         private Node _tail;
@@ -127,6 +102,22 @@ namespace Learning.Libs.DataStructures
         private int _length;
 
         private SortingStatistics _sortingStats;
+
+        public int Count
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public void Add(T data)
         {
@@ -482,6 +473,26 @@ namespace Learning.Libs.DataStructures
             }
 
             return retListHead;
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(T item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
