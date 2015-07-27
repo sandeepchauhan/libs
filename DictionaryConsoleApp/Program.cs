@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Learning.Libs.ExtensionMethods;
 using Learning.Libs.DataStructures.Interfaces;
+using System.Diagnostics;
 
 namespace DictionaryConsoleApp
 {
@@ -15,23 +16,31 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            ISortableCollection<int> collection = new ArrayImpl<int>();
-            collection.Add(2);
-            collection.Add(6);
-            collection.Add(4);
-            collection.Add(8);
-            collection.Add(1);
-            collection.Add(5);
-            collection.Add(3);
-            collection.Add(7);
+            int numElements = 10000;
+            ISortableCollection<int> collection = new ArrayImpl<int>(numElements);
+            List<int> numbers = new List<int>();
+            for(int i = numElements; i > 0; i--)
+            {
+                numbers.Add(i);
+            }
+            collection.AddMany(numbers);
             //list.Sort(SortingAlgorithm.MergeSort);
             //list.Sort(SortingAlgorithm.QuickSort);
-            collection.Sort(SortingAlgorithm.MergeSort);
-            foreach(int i in collection)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            collection.Sort(SortingAlgorithm.InsertionSort);
+            sw.Stop();
+            int j = 0;
+            foreach (int i in collection)
             {
                 Console.WriteLine(i);
+                if (++j == 100)
+                {
+                    break;
+                }
             }
 
+            Console.WriteLine("Time taken: " + sw.ElapsedMilliseconds);
             bool isPrime = IsPrime(4111);
             DictionarySanitizer.WriteSanitizedDictionary();
             Trie<string> trieDictionary = TrieDictionary.Populate();

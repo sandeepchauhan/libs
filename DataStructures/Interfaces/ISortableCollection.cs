@@ -9,5 +9,7 @@ namespace Learning.Libs.DataStructures.Interfaces
     public interface ISortableCollection<T> : IEnumerable<T>, ICollection<T> where T : IComparable<T>
     {
         void Sort(SortingAlgorithm sortingAlgorithm = SortingAlgorithm.NA);
+
+        void AddMany(List<T> items);
     }
 }

@@ -47,6 +47,7 @@
     <Compile Include="Interfaces\ISortableCollection.cs" />
     <Compile Include="Interfaces\IStringDictionary.cs" />
     <Compile Include="LinkedList.cs" />
+    <Compile Include="SortableCollectionBase.cs" />
     <Compile Include="SortingAlgorithm.cs" />
     <Compile Include="SortingStatistics.cs" />
     <Compile Include="StringHashTable.cs" />
