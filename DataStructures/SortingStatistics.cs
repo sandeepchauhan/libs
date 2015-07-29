@@ -25,6 +25,10 @@ namespace Learning.Libs.DataStructures
 
         public int NumSwaps;
 
+        public int MaxRecursionDepth;
+
+        private int _currentRecursionDepth;
+
         private static SortingStatistics _instance;
 
         public static SortingStatistics Instance
@@ -42,8 +46,29 @@ namespace Learning.Libs.DataStructures
 
         public void Print()
         {
-            Console.WriteLine("Number of comparisons: " + NumComparisons);
-            Console.WriteLine("Number of swaps: " + NumSwaps);
+            Console.WriteLine(string.Format("Comparisons: {0}, Swaps: {1}, MaxRecursionDepth: {2}.", NumComparisons, NumSwaps, MaxRecursionDepth));
+        }
+
+        public void Reset()
+        {
+            _instance = new SortingStatistics();
+        }
+
+        public void IncrementCurrentRecursionDepth()
+        {
+            if (++this._currentRecursionDepth > MaxRecursionDepth)
+            {
+                MaxRecursionDepth = this._currentRecursionDepth;
+                if (MaxRecursionDepth > 500)
+                {
+
+                }
+            }
+        }
+
+        public void DecrementRecursionDepth()
+        {
+            this._currentRecursionDepth--;
         }
     }
 }

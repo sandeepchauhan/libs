@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Learning.Libs.DataStructures
 {
-    public class LinkedList<T> : ISortableCollection<T> where T : IComparable<T>
+    public class LinkedList<T> : SortableCollectionBase<T> where T : IComparable<T>
     {
         private class Node
         {
@@ -103,23 +103,7 @@ namespace Learning.Libs.DataStructures
 
         private SortingStatistics _sortingStats;
 
-        public int Count
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public void Add(T data)
+        override public void Add(T data)
         {
             if (_head == null)
             {
@@ -133,19 +117,13 @@ namespace Learning.Libs.DataStructures
             _length++;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public override IEnumerator<T> GetEnumerator()
         {
             return new Enumerator(this);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
         {
-            return GetEnumerator();
-        }
-
-        public void Sort(SortingAlgorithm sortingAlgorithm)
-        {
-            _sortingStats = new SortingStatistics();
             if (this._head != null && this._head.Next != null)
             {
                 switch (sortingAlgorithm)
@@ -164,7 +142,6 @@ namespace Learning.Libs.DataStructures
                         break;
                 }
             }
-            _sortingStats.Print();
         }
 
         private Tuple<Node, Node> QuickSort(Node head)
@@ -473,26 +450,6 @@ namespace Learning.Libs.DataStructures
             }
 
             return retListHead;
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Contains(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(T item)
-        {
-            throw new NotImplementedException();
         }
     }
 }

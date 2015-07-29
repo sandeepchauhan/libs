@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Learning.Libs.ExtensionMethods;
 using Learning.Libs.DataStructures.Interfaces;
+using System.Diagnostics;
 
 namespace DictionaryConsoleApp
 {
@@ -15,23 +16,55 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            ISortableCollection<int> collection = new ArrayImpl<int>();
-            collection.Add(2);
-            collection.Add(6);
-            collection.Add(4);
-            collection.Add(8);
-            collection.Add(1);
-            collection.Add(5);
-            collection.Add(3);
-            collection.Add(7);
-            //list.Sort(SortingAlgorithm.MergeSort);
-            //list.Sort(SortingAlgorithm.QuickSort);
-            collection.Sort(SortingAlgorithm.MergeSort);
-            foreach(int i in collection)
+            int numElements = 20000;
+            //int numElements = 80;
+            SortingAlgorithm sortingAlgorithm;
+            ISortableCollection<Guid> collection;
+            List<SortInputType> sortingCases = new List<SortInputType>()
             {
-                Console.WriteLine(i);
+                //SortInputType.BestCase
+                //SortInputType.WorstCase
+                SortInputType.Random
+            };
+
+            #region Selection Sort
+            sortingAlgorithm = SortingAlgorithm.HeapSort;
+            foreach (SortInputType sit in sortingCases)
+            {
+                for (int i = 0; i < 1; i++)
+                {
+                    SortingScenario sortingScenario = new SortingScenario(sortingAlgorithm, numElements, sit);
+                    Console.WriteLine(sortingScenario);
+                    collection = new ArrayImpl<Guid>(numElements);
+                    collection.AddMany(GetInput<Guid>(sortingAlgorithm, numElements, sit));
+                    collection.Sort(sortingAlgorithm);
+                    Console.WriteLine("====================================================================");
+                }
+            }
+            #endregion
+
+            Console.WriteLine();
+            Console.WriteLine("Press any key to exit....");
+            Console.ReadKey();
+        }
+
+        static List<T> GetInput<T>(SortingAlgorithm sortingAlgorithm, int numElements, SortInputType sortInputType)
+        {
+            switch(sortInputType)
+            {
+                case SortInputType.BestCase:
+                    return DataProviderForSortAlgorithms.GenerateBestCaseInput<T>(sortingAlgorithm, numElements);
+                case SortInputType.Random:
+                    return DataProviderForSortAlgorithms.GenerateRandomInput<T>(numElements);
+                case SortInputType.WorstCase:
+                    return DataProviderForSortAlgorithms.GenerateWorstCaseInput<T>(sortingAlgorithm, numElements);
             }
 
+            throw new NotSupportedException();
+        }
+
+        static void Code()
+        {
             bool isPrime = IsPrime(4111);
             DictionarySanitizer.WriteSanitizedDictionary();
             Trie<string> trieDictionary = TrieDictionary.Populate();

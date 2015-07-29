@@ -6,39 +6,23 @@ using System.Linq;
 
 namespace Learning.Libs.DataStructures
 {
-    public class Heap<T> : ISortableCollection<T> where T : IComparable<T>
+    public class Heap<T> : SortableCollectionBase<T> where T : IComparable<T>
     {
         private T[] _array;
 
         private int _size;
-
-        public int Count
-        {
-            get
-            {
-                return ((ICollection<T>)_array).Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                return ((ICollection<T>)_array).IsReadOnly;
-            }
-        }
 
         public Heap()
         {
             _array = new T[512];
         }
 
-        public void Add(T data)
+        public override void Add(T data)
         {
             _array[_size++] = data;
         }
 
-        public void Sort(SortingAlgorithm sortingAlgorithm = SortingAlgorithm.NA)
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
         {
             int s = _size;
             BuildHeap();
@@ -108,34 +92,9 @@ namespace Learning.Libs.DataStructures
             return (index * 2) + 2;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public override IEnumerator<T> GetEnumerator()
         {
             return _array.Take(_size).AsEnumerable().GetEnumerator();
-        }
-
-        public void Clear()
-        {
-            ((ICollection<T>)_array).Clear();
-        }
-
-        public bool Contains(T item)
-        {
-            return ((ICollection<T>)_array).Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            ((ICollection<T>)_array).CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(T item)
-        {
-            return ((ICollection<T>)_array).Remove(item);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((ICollection<T>)_array).GetEnumerator();
         }
     }
 }

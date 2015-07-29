@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Learning.Libs.DataStructures
 {
-    public class ArrayImpl<T> : ISortableCollection<T> where T : IComparable<T>
+    public class ArrayImpl<T> : SortableCollectionBase<T> where T : IComparable<T>
     {
         private T[] _array;
 
@@ -18,29 +18,13 @@ namespace Learning.Libs.DataStructures
 
         private int _capacity;
 
-        public int Count
-        {
-            get
-            {
-                return ((ICollection<T>)_array).Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                return ((ICollection<T>)_array).IsReadOnly;
-            }
-        }
-
         public ArrayImpl(int capacity = 512)
         {
             _capacity = capacity;
             _array = new T[capacity];
         }
 
-        public void Add(T data)
+        public override void Add(T data)
         {
             if (_size >= _capacity)
             {
@@ -50,7 +34,7 @@ namespace Learning.Libs.DataStructures
             _array[_size++] = data;
         }
 
-        public void Sort(SortingAlgorithm sortingAlgorithm)
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
         {
             if (this._size > 1)
             {
@@ -69,21 +53,18 @@ namespace Learning.Libs.DataStructures
                     case SortingAlgorithm.QuickSort:
                         QuickSort(0, _size - 1);
                         break;
+                    case SortingAlgorithm.HeapSort:
+                        HeapSort();
+                        break;
                     default:
                         throw new Exception("Sorting algorithm: " + sortingAlgorithm + " not supported.");
                 }
             }
-            SortingStatistics.Instance.Print();
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public override IEnumerator<T> GetEnumerator()
         {
             return _array.Take(_size).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         private void SelectionSort()
@@ -140,8 +121,12 @@ namespace Learning.Libs.DataStructures
             else
             {
                 int mid = (start + end) / 2;
+                SortingStatistics.Instance.IncrementCurrentRecursionDepth();
                 MergeSort(start, mid);
+                SortingStatistics.Instance.DecrementRecursionDepth();
+                SortingStatistics.Instance.IncrementCurrentRecursionDepth();
                 MergeSort(mid + 1, end);
+                SortingStatistics.Instance.DecrementRecursionDepth();
                 #region Merge
                 int curr1 = start, curr2 = mid + 1, sortedCurr = 0;
                 while(curr1 <= mid && curr2 <= end)
@@ -198,10 +183,101 @@ namespace Learning.Libs.DataStructures
             else
             {
                 int pivot = start;
-                #region Put pivot in final position
-
+                #region Partition elements based on pivot
+                int swapCandidateLeft = start + 1, swapCandidateRight = end;
+                while (swapCandidateLeft <= swapCandidateRight)
+                {
+                    while (swapCandidateLeft <= swapCandidateRight && ComparatorImpl<T>.Instance.Compare(_array[swapCandidateLeft], _array[pivot]) <= 0)
+                    {
+                        swapCandidateLeft++;
+                    }
+                    while (swapCandidateRight >= swapCandidateLeft && ComparatorImpl<T>.Instance.Compare(_array[swapCandidateRight], _array[pivot]) >= 0)
+                    {
+                        swapCandidateRight--;
+                    }
+                    if (swapCandidateLeft < swapCandidateRight)
+                    {
+                        Swap(swapCandidateLeft++, swapCandidateRight--);
+                    }
+                }
+                Swap(pivot, swapCandidateLeft - 1);
+                if ((swapCandidateLeft - 2) > start)
+                {
+                    SortingStatistics.Instance.IncrementCurrentRecursionDepth();
+                    QuickSort(start, swapCandidateLeft - 2);
+                    SortingStatistics.Instance.DecrementRecursionDepth();
+                }
+                SortingStatistics.Instance.IncrementCurrentRecursionDepth();
+                if (end - swapCandidateLeft >= 1)
+                {
+                    QuickSort(swapCandidateLeft, end);
+                }
+                SortingStatistics.Instance.DecrementRecursionDepth();
                 #endregion
             }
+        }
+
+        private void HeapSort()
+        {
+            int s = _size;
+            BuildHeap();
+            while (_size > 1)
+            {
+                Swap(0, --_size);
+                Heapify(0);
+            }
+
+            _size = s;
+        }
+
+        private void BuildHeap()
+        {
+            int currParent = GetParent(_size - 1);
+            while (currParent >= 0)
+            {
+                Heapify(currParent);
+                currParent--;
+            }
+        }
+
+        private void Heapify(int node)
+        {
+            while (node != -1)
+            {
+                int lc = GetLeftChild(node);
+                int rc = GetRightChild(node);
+                if (lc < _size && rc < _size && (ComparatorImpl<T>.Instance.Compare(_array[lc], _array[rc]) > 0) && ComparatorImpl<T>.Instance.Compare(_array[node], _array[lc]) < 0)
+                {
+                    // Left child is bigger
+                    Swap(node, lc);
+                    node = lc;
+                }
+                else if (rc < _size && ComparatorImpl<T>.Instance.Compare(_array[node], _array[rc]) < 0)
+                {
+                    // Right child is bigger
+                    Swap(node, rc);
+                    node = rc;
+                }
+                else
+                {
+                    node = -1;
+                }
+            }
+        }
+
+        private int GetParent(int index)
+        {
+            return (int)Math.Floor(((double)index - 1) / 2);
+        }
+
+        private int GetLeftChild(int index)
+        {
+            return (index * 2) + 1;
+        }
+
+        private int GetRightChild(int index)
+        {
+            return (index * 2) + 2;
         }
 
         private void Swap(int x, int y)
@@ -213,26 +289,6 @@ namespace Learning.Libs.DataStructures
                 _array[x] = tmp;
                 SortingStatistics.Instance.NumSwaps++;
             }
-        }
-
-        public void Clear()
-        {
-            ((ICollection<T>)_array).Clear();
-        }
-
-        public bool Contains(T item)
-        {
-            return ((ICollection<T>)_array).Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            ((ICollection<T>)_array).CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(T item)
-        {
-            return ((ICollection<T>)_array).Remove(item);
         }
     }
 }
