@@ -17,27 +17,27 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            int numElements = 20000;
-            //int numElements = 80;
+            //int numElements = 20000;
+            int numElements = 80;
             SortingAlgorithm sortingAlgorithm;
-            ISortableCollection<Guid> collection;
+            ISortableCollection<int> collection;
             List<SortInputType> sortingCases = new List<SortInputType>()
             {
                 //SortInputType.BestCase
-                //SortInputType.WorstCase
-                SortInputType.Random
+                SortInputType.WorstCase
+                //SortInputType.Random
             };
 
             #region Selection Sort
-            sortingAlgorithm = SortingAlgorithm.HeapSort;
+            sortingAlgorithm = SortingAlgorithm.QuickSort;
             foreach (SortInputType sit in sortingCases)
             {
                 for (int i = 0; i < 1; i++)
                 {
                     SortingScenario sortingScenario = new SortingScenario(sortingAlgorithm, numElements, sit);
                     Console.WriteLine(sortingScenario);
-                    collection = new ArrayImpl<Guid>(numElements);
-                    collection.AddMany(GetInput<Guid>(sortingAlgorithm, numElements, sit));
+                    collection = new ArrayImpl<int>(numElements);
+                    collection.AddMany(GetInput<int>(sortingAlgorithm, numElements, sit));
                     collection.Sort(sortingAlgorithm);
                     Console.WriteLine("====================================================================");
                 }
