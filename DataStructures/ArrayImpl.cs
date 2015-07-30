@@ -164,12 +164,20 @@ namespace Learning.Libs.DataStructures
             }
         }
 
+        /// <summary>
+        /// Sorts the array in-place using quick sort algorithim (recursive version).
+        /// </summary>
+        /// <param name="start">Index of the first element in array to sort.</param>
+        /// <param name="end">Index of the last element in array to sort.</param>
         private void QuickSort(int start, int end)
         {
+            #region Exception cases
             if (start > end)
             {
                 throw new Exception("Start can not be greater than end.");
             }
+            #endregion
+            #region Trivial cases
             if (start == end)
             {
                 return;
@@ -181,41 +189,55 @@ namespace Learning.Libs.DataStructures
                     Swap(start, end);
                 }
             }
+            #endregion
+            #region Non-Trivial cases
             else
             {
-                int pivot = start;
+                T pivotData = _array[start];
                 #region Partition elements based on pivot
-                int swapCandidateLeft = start + 1, swapCandidateRight = end;
-                while (swapCandidateLeft <= swapCandidateRight)
+                int leftArrayTail = -1, rightArrayHead = -1, rightArrayTail = -1, current = start + 1;
+                while (current <= end)
                 {
-                    while (swapCandidateLeft <= swapCandidateRight && ComparatorImpl<T>.Instance.Compare(_array[swapCandidateLeft], _array[pivot]) <= 0)
+                    if (ComparatorImpl<T>.Instance.Compare(_array[current], pivotData) <= 0)
                     {
-                        swapCandidateLeft++;
+                        if (rightArrayHead != -1 && current > rightArrayHead)
+                        {
+                            leftArrayTail = rightArrayHead;
+                            Swap(rightArrayHead++, current);
+                        }
+                        else
+                        {
+                            leftArrayTail = current;
+                        }
                     }
-                    while (swapCandidateRight >= swapCandidateLeft && ComparatorImpl<T>.Instance.Compare(_array[swapCandidateRight], _array[pivot]) >= 0)
+                    else
                     {
-                        swapCandidateRight--;
+                        if (rightArrayHead == -1)
+                        {
+                            rightArrayHead = current;
+                        }
+                        rightArrayTail = current;
                     }
-                    if (swapCandidateLeft < swapCandidateRight)
-                    {
-                        Swap(swapCandidateLeft++, swapCandidateRight--);
-                    }
+                    current++;
                 }
-                Swap(pivot, swapCandidateLeft - 1);
-                if ((swapCandidateLeft - 2) > start)
+                #endregion
+                #region Recursively sort left and right sub parts.
+                if (leftArrayTail != -1)
                 {
+                    Swap(start, leftArrayTail);
                     SortingStatistics.Instance.IncrementCurrentRecursionDepth();
-                    QuickSort(start, swapCandidateLeft - 2);
+                    QuickSort(start, leftArrayTail - 1);
                     SortingStatistics.Instance.DecrementRecursionDepth();
                 }
-                SortingStatistics.Instance.IncrementCurrentRecursionDepth();
-                if (end - swapCandidateLeft >= 1)
+                if (rightArrayTail != -1 && (rightArrayTail - rightArrayHead) > 0)
                 {
-                    QuickSort(swapCandidateLeft, end);
+                    SortingStatistics.Instance.IncrementCurrentRecursionDepth();
+                    QuickSort(rightArrayHead, rightArrayTail);
+                    SortingStatistics.Instance.DecrementRecursionDepth();
                 }
-                SortingStatistics.Instance.DecrementRecursionDepth();
                 #endregion
             }
+            #endregion
         }
 
         private void HeapSort()
