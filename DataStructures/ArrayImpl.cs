@@ -1,4 +1,5 @@
-﻿using Learning.Libs.DataStructures.Interfaces;
+﻿using Learning.Libs.DataStructures.Enums;
+using Learning.Libs.DataStructures.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;

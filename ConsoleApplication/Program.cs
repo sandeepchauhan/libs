@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Learning.Libs.ExtensionMethods;
 using Learning.Libs.DataStructures.Interfaces;
 using System.Diagnostics;
+using Learning.Libs.DataStructures.Enums;
 
 namespace DictionaryConsoleApp
 {
