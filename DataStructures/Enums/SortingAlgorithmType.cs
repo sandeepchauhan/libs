@@ -6,16 +6,10 @@ using System.Threading.Tasks;
 
 namespace Learning.Libs.DataStructures.Enums
 {
-    public enum SortingAlgorithm
+    public enum SortingAlgorithmType
     {
-        SelectionSort,
+        Iterative,
 
-        InsertionSort,
-
-        MergeSort,
-
-        QuickSort,
-
-        HeapSort
+        Recursive
     }
 }

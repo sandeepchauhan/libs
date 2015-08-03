@@ -23,7 +23,7 @@ namespace Learning.Libs.DataStructures
             _array[_size++] = data;
         }
 
-        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType)
         {
             int s = _size;
             BuildHeap();

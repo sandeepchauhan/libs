@@ -43,6 +43,7 @@
     <Compile Include="ComparerImpl.cs" />
     <Compile Include="CustomString.cs" />
     <Compile Include="DataProviderForSortAlgorithms.cs" />
+    <Compile Include="Enums\SortingAlgorithmType.cs" />
     <Compile Include="HashTable.cs" />
     <Compile Include="Heap.cs" />
     <Compile Include="Interfaces\ISortableCollection.cs" />

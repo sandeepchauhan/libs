@@ -17,8 +17,8 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            //int numElements = 20000;
-            int numElements = 80;
+            int numElements = 20000;
+            //int numElements = 80;
             SortingAlgorithm sortingAlgorithm;
             ISortableCollection<int> collection;
             List<SortInputType> sortingCases = new List<SortInputType>()
@@ -38,7 +38,7 @@ namespace DictionaryConsoleApp
                     Console.WriteLine(sortingScenario);
                     collection = new ArrayImpl<int>(numElements);
                     collection.AddMany(GetInput<int>(sortingAlgorithm, numElements, sit));
-                    collection.Sort(sortingAlgorithm);
+                    collection.Sort(sortingAlgorithm, SortingAlgorithmType.Iterative);
                     Console.WriteLine("====================================================================");
                 }
             }

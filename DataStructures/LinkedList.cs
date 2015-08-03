@@ -123,7 +123,7 @@ namespace Learning.Libs.DataStructures
             return new Enumerator(this);
         }
 
-        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType)
         {
             if (this._head != null && this._head.Next != null)
             {
