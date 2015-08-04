@@ -36,7 +36,7 @@ namespace Learning.Libs.DataStructures
             if (typeof(T) == typeof(int))
             {
                 List<int> retList = new List<int>();
-                for (int i = 1; i <= size; i++)
+                for (int i = size; i >= 1; i--)
                 {
                     retList.Add(i);
                 }

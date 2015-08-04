@@ -44,15 +44,15 @@ namespace Learning.Libs.DataStructures
             sw.Start();
             SortInternal(sortingAlgorithm);
             sw.Stop();
-            //int j = 0;
-            //foreach (T i in this)
-            //{
-            //    Console.WriteLine(i);
-            //    if (++j == 20)
-            //    {
-            //        break;
-            //    }
-            //}
+            int j = 0;
+            foreach (T i in this)
+            {
+                Console.WriteLine(i);
+                if (++j == 20)
+                {
+                    break;
+                }
+            }
             Console.WriteLine("Time taken: " + sw.ElapsedMilliseconds);
             SortingStatistics.Instance.Print();
         }
