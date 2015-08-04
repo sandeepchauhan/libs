@@ -1,4 +1,5 @@
-﻿using Learning.Libs.DataStructures.Interfaces;
+﻿using Learning.Libs.DataStructures.Enums;
+using Learning.Libs.DataStructures.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace Learning.Libs.DataStructures
                         MergeSort(0, _size - 1);
                         break;
                     case SortingAlgorithm.QuickSort:
-                        QuickSort(0, _size - 1);
+                        QuickSortIterative(0, _size - 1);
                         break;
                     case SortingAlgorithm.HeapSort:
                         HeapSort();
@@ -237,6 +238,93 @@ namespace Learning.Libs.DataStructures
                 #endregion
             }
             #endregion
+        }
+
+        /// <summary>
+        /// Sorts the array in-place using quick sort algorithim (recursive version).
+        /// </summary>
+        /// <param name="start">Index of the first element in array to sort.</param>
+        /// <param name="end">Index of the last element in array to sort.</param>
+        private void QuickSortIterative(int start, int end)
+        {
+            Queue<Tuple<int, int>> arraysToCallPartitionOn = new Queue<Tuple<int, int>>();
+            arraysToCallPartitionOn.Enqueue(new Tuple<int, int>(start, end));
+            while(arraysToCallPartitionOn.Any())
+            {
+                Tuple<int, int> array = arraysToCallPartitionOn.Dequeue();
+                int p = QuickSortPartition(array.Item1, array.Item2);
+                if (array.Item1 < p)
+                {
+                    arraysToCallPartitionOn.Enqueue(new Tuple<int, int>(array.Item1, p - 1));
+                }
+                if (array.Item2 > p)
+                {
+                    arraysToCallPartitionOn.Enqueue(new Tuple<int, int>(p + 1, array.Item2));
+                }
+            }
+        }
+
+        private int QuickSortPartition(int start, int end)
+        {
+            #region Exception cases
+            if (start > end)
+            {
+                throw new Exception("Start can not be greater than end.");
+            }
+            #endregion
+            int pivotPosition = start;
+            #region Trivial cases
+            if (end - start == 1)
+            {
+                pivotPosition = start;
+                if (ComparatorImpl<T>.Instance.Compare(_array[start], _array[end]) > 0)
+                {
+                    Swap(start, end);
+                    pivotPosition = end;
+                }
+            }
+            #endregion
+            #region Non-Trivial cases
+            else if (end - start > 1)
+            {
+                T pivotData = _array[start];
+                #region Partition elements based on pivot
+                int leftArrayTail = -1, rightArrayHead = -1, rightArrayTail = -1, current = start + 1;
+                while (current <= end)
+                {
+                    if (ComparatorImpl<T>.Instance.Compare(_array[current], pivotData) <= 0)
+                    {
+                        if (rightArrayHead != -1 && current > rightArrayHead)
+                        {
+                            leftArrayTail = rightArrayHead;
+                            Swap(rightArrayHead++, current);
+                        }
+                        else
+                        {
+                            leftArrayTail = current;
+                        }
+                    }
+                    else
+                    {
+                        if (rightArrayHead == -1)
+                        {
+                            rightArrayHead = current;
+                        }
+                        rightArrayTail = current;
+                    }
+                    current++;
+                }
+                #endregion
+                #region Put pivot at right location.
+                if (leftArrayTail != -1)
+                {
+                    Swap(start, leftArrayTail);
+                    pivotPosition = leftArrayTail;
+                }
+                #endregion
+            }
+            #endregion
+            return pivotPosition;
         }
 
         private void HeapSort()

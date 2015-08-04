@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Learning.Libs.ExtensionMethods;
 using Learning.Libs.DataStructures.Interfaces;
 using System.Diagnostics;
+using Learning.Libs.DataStructures.Enums;
 
 namespace DictionaryConsoleApp
 {
@@ -23,8 +24,8 @@ namespace DictionaryConsoleApp
             List<SortInputType> sortingCases = new List<SortInputType>()
             {
                 //SortInputType.BestCase
-                //SortInputType.WorstCase
-                SortInputType.Random
+                SortInputType.WorstCase
+                //SortInputType.Random
             };
 
             #region Selection Sort

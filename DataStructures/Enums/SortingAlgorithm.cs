@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Learning.Libs.DataStructures
+namespace Learning.Libs.DataStructures.Enums
 {
     public enum SortingAlgorithm
     {
