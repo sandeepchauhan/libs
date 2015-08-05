@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayImpl.cs" />
+    <Compile Include="ArrayString.cs" />
     <Compile Include="ComparerImpl.cs" />
     <Compile Include="CustomString.cs" />
     <Compile Include="DataProviderForSortAlgorithms.cs" />

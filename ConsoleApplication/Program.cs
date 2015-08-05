@@ -17,6 +17,18 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
+            ArrayImpl<char> strArr = new ArrayImpl<char>();
+            //strArr.AddMany("cat".ToList());
+            //strArr.Sort(SortingAlgorithm.QuickSort, SortingAlgorithmType.Iterative);
+            List<string> permutations = ArrayString.GetPermutationsIterative("abcdefghij");
+            //permutations.ForEach(x => Console.WriteLine(x));
+            Console.WriteLine(permutations.Count);
+            Console.WriteLine("Press any key to exit....");
+            Console.ReadKey();
+        }
+
+        private static void Sorting()
+        {
             int numElements = 20000;
             //int numElements = 80;
             SortingAlgorithm sortingAlgorithm;
@@ -43,10 +55,6 @@ namespace DictionaryConsoleApp
                 }
             }
             #endregion
-
-            Console.WriteLine();
-            Console.WriteLine("Press any key to exit....");
-            Console.ReadKey();
         }
 
         static List<T> GetInput<T>(SortingAlgorithm sortingAlgorithm, int numElements, SortInputType sortInputType)

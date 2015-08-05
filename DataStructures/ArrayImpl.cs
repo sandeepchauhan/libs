@@ -63,7 +63,7 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        public override IEnumerator<T> GetEnumerator()
+        override public IEnumerator<T> GetEnumerator()
         {
             return _array.Take(_size).GetEnumerator();
         }
@@ -399,6 +399,16 @@ namespace Learning.Libs.DataStructures
                 _array[x] = tmp;
                 SortingStatistics.Instance.NumSwaps++;
             }
+        }
+
+        override public string ToString()
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            foreach(T item in this)
+            {
+                strBuilder.Append(item.ToString());
+            }
+            return strBuilder.ToString();
         }
     }
 }
