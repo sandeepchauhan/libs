@@ -15,3 +15,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+ul.horizontal-list li {
+    display: inline;
+    padding: 10px 40px;
+}

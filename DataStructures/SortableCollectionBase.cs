@@ -38,12 +38,12 @@ namespace Learning.Libs.DataStructures
         }
 
         public abstract IEnumerator<T> GetEnumerator();
-        public void Sort(SortingAlgorithm sortingAlgorithm = SortingAlgorithm.NA)
+        public void Sort(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType)
         {
             SortingStatistics.Instance.Reset();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            SortInternal(sortingAlgorithm);
+            SortInternal(sortingAlgorithm, sortingAlgorithmType);
             sw.Stop();
             int j = 0;
             foreach (T i in this)
@@ -58,7 +58,7 @@ namespace Learning.Libs.DataStructures
             SortingStatistics.Instance.Print();
         }
 
-        protected abstract void SortInternal(SortingAlgorithm sortingAlgorithm);
+        protected abstract void SortInternal(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType);
 
         IEnumerator IEnumerable.GetEnumerator()
         {

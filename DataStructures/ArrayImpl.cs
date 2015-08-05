@@ -35,7 +35,7 @@ namespace Learning.Libs.DataStructures
             _array[_size++] = data;
         }
 
-        protected override void SortInternal(SortingAlgorithm sortingAlgorithm)
+        protected override void SortInternal(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType)
         {
             if (this._size > 1)
             {
@@ -63,7 +63,7 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        public override IEnumerator<T> GetEnumerator()
+        override public IEnumerator<T> GetEnumerator()
         {
             return _array.Take(_size).GetEnumerator();
         }
@@ -241,7 +241,7 @@ namespace Learning.Libs.DataStructures
         }
 
         /// <summary>
-        /// Sorts the array in-place using quick sort algorithim (recursive version).
+        /// Sorts the array in-place using quick sort algorithim (iterative version).
         /// </summary>
         /// <param name="start">Index of the first element in array to sort.</param>
         /// <param name="end">Index of the last element in array to sort.</param>
@@ -399,6 +399,16 @@ namespace Learning.Libs.DataStructures
                 _array[x] = tmp;
                 SortingStatistics.Instance.NumSwaps++;
             }
+        }
+
+        override public string ToString()
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            foreach(T item in this)
+            {
+                strBuilder.Append(item.ToString());
+            }
+            return strBuilder.ToString();
         }
     }
 }

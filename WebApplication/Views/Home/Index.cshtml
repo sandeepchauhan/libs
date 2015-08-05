@@ -1,4 +1,36 @@
-﻿@Model 
+﻿@model WebApplication.Models.HomePageModel
 <div>
-    @Html.CheckBoxFor<
+    <div>Select sorting algortihm(s)</div>
+    <div>
+        <ul class="horizontal-list" id="sortingAlgorithmsList">
+            @for (int i = 0; i < Model.SortingAlgorithms.Count; i++)
+            {
+                <li>
+                    @Html.CheckBoxFor(m => m.SortingAlgorithms[i].Checked, new { id = Model.SortingAlgorithms[i].Text })
+                    @Html.DisplayFor(m => m.SortingAlgorithms[i].Text)
+                </li>
+            }
+        </ul>
+    </div>
+    <div>
+        <p>Number of elements: </p><input type="number" id="numElements" />
+    </div>
+    <br />
+    <br />
+    <button onclick="func()">Submit</button>
 </div>
+<script type="text/javascript">
+    function func() {
+        var sortingAlgorithm;
+        var sortingAlgorithmListItems = document.getElementById("sortingAlgorithmsList").getElementsByTagName("li");
+        for (var i = 0; i < sortingAlgorithmListItems.length; i++)
+        {
+            if (sortingAlgorithmListItems[i].Checked)
+            {
+                sortingAlgorithm = sortingAlgorithmListItems[i].Text;
+            }
+        }
+        var numElements = document.getElementById("numElements").value;
+
+    }
+</script>
