@@ -49,7 +49,8 @@
     <Compile Include="Heap.cs" />
     <Compile Include="Interfaces\ISortableCollection.cs" />
     <Compile Include="Interfaces\IStringDictionary.cs" />
-    <Compile Include="LinkedList.cs" />
+    <Compile Include="LinkedListImpl.cs" />
+    <Compile Include="LinkedListNodeImpl.cs" />
     <Compile Include="SortableCollectionBase.cs" />
     <Compile Include="Enums\SortingAlgorithm.cs" />
     <Compile Include="SortingScenario.cs" />
