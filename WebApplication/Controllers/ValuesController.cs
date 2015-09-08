@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
@@ -16,9 +17,10 @@ namespace WebApplication.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public object Get(int id)
         {
-            return "value";
+            return new HomePageModel();
+            //return "value";
         }
 
         // POST api/values

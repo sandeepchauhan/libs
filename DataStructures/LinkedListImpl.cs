@@ -6,32 +6,20 @@ using System.Collections.Generic;
 
 namespace Learning.Libs.DataStructures
 {
-    public class LinkedList<T> : SortableCollectionBase<T> where T : IComparable<T>
+    public class LinkedListImpl<T> : SortableCollectionBase<T> where T : IComparable<T>
     {
-        private class Node
-        {
-            public T Data { get; set; }
-
-            public Node Next { get; set; }
-
-            public Node(T data)
-            {
-                this.Data = data;
-            }
-        }
-
         private class Enumerator : IEnumerator<T>
         {
-            private LinkedList<T> _list;
+            private LinkedListImpl<T> _list;
 
-            private Node _current;
+            private LinkedListNodeImpl<T> _current;
 
-            private Node _fakeNode;
+            private LinkedListNodeImpl<T> _fakeNode;
 
-            public Enumerator(LinkedList<T> list)
+            public Enumerator(LinkedListImpl<T> list)
             {
                 _list = list;
-                _fakeNode = new Node(default(T));
+                _fakeNode = new LinkedListNodeImpl<T>(default(T));
                 _fakeNode.Next = _list._head;
                 _current = _fakeNode;
             }
@@ -96,9 +84,9 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        private Node _head;
+        private LinkedListNodeImpl<T> _head;
 
-        private Node _tail;
+        private LinkedListNodeImpl<T> _tail;
 
         private int _length;
 
@@ -108,11 +96,11 @@ namespace Learning.Libs.DataStructures
         {
             if (_head == null)
             {
-                _head = _tail = new Node(data);
+                _head = _tail = new LinkedListNodeImpl<T>(data);
             }
             else
             {
-                _tail.Next = new Node(data);
+                _tail.Next = new LinkedListNodeImpl<T>(data);
                 _tail = _tail.Next;
             }
             _length++;
@@ -145,16 +133,16 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        private Tuple<Node, Node> QuickSort(Node head)
+        private Tuple<LinkedListNodeImpl<T>, LinkedListNodeImpl<T>> QuickSort(LinkedListNodeImpl<T> head)
         {
-            Node pivotNode = head;
-            Node current = head.Next;
-            Node leftChainHead = null, leftChainTail = null;
-            Node rightChainHead = null, rightChainTail = null;
+            LinkedListNodeImpl<T> pivotNode = head;
+            LinkedListNodeImpl<T> current = head.Next;
+            LinkedListNodeImpl<T> leftChainHead = null, leftChainTail = null;
+            LinkedListNodeImpl<T> rightChainHead = null, rightChainTail = null;
             #region while loop
             while (current != null)
             {
-                Node next = current.Next;
+                LinkedListNodeImpl<T> next = current.Next;
                 current.Next = null;
                 if (current.Data.CompareTo(pivotNode.Data) < 0)
                 {
@@ -183,9 +171,9 @@ namespace Learning.Libs.DataStructures
                 current = next;
             }
             #endregion
-            Node retHead = null, retTail = null;
-            Tuple<Node, Node> leftChainSorted = null;
-            Tuple<Node, Node> rightChainSorted = null;
+            LinkedListNodeImpl<T> retHead = null, retTail = null;
+            Tuple<LinkedListNodeImpl<T>, LinkedListNodeImpl<T>> leftChainSorted = null;
+            Tuple<LinkedListNodeImpl<T>, LinkedListNodeImpl<T>> rightChainSorted = null;
             pivotNode.Next = null;
             if (leftChainTail != null)
             {
@@ -216,7 +204,7 @@ namespace Learning.Libs.DataStructures
             }
 
             //string s = "Sorted sequence: ";
-            //Node c = retHead;
+            //LinkedListNodeImpl<T> c = retHead;
             //while (c != null)
             //{
             //    s += c.Data;
@@ -224,19 +212,19 @@ namespace Learning.Libs.DataStructures
             //    c = c.Next;
             //}
             //Console.WriteLine(s);
-            return new Tuple<Node, Node>(retHead, retTail);
+            return new Tuple<LinkedListNodeImpl<T>, LinkedListNodeImpl<T>>(retHead, retTail);
         }
 
-        private Node SelectionSort(Node head)
+        private LinkedListNodeImpl<T> SelectionSort(LinkedListNodeImpl<T> head)
         { 
-            Node retListHead = null;
-            Node retListTail = null;
-            Node remListHead = head;
+            LinkedListNodeImpl<T> retListHead = null;
+            LinkedListNodeImpl<T> retListTail = null;
+            LinkedListNodeImpl<T> remListHead = head;
             while (remListHead != null)
             {
-                Node minDataNode = remListHead;
-                Node minDataNodePrev = null;
-                Node current = remListHead;
+                LinkedListNodeImpl<T> minDataNode = remListHead;
+                LinkedListNodeImpl<T> minDataNodePrev = null;
+                LinkedListNodeImpl<T> current = remListHead;
                 while (current.Next != null)
                 {
                     if (current.Next.Data.CompareTo(minDataNode.Data) < 0)
@@ -268,14 +256,14 @@ namespace Learning.Libs.DataStructures
             return retListHead;
         }
 
-        private Node InsertionSort(Node head)
+        private LinkedListNodeImpl<T> InsertionSort(LinkedListNodeImpl<T> head)
         {
-            Node retListHead = head;
-            Node current = head.Next, currentPrevious = head;
+            LinkedListNodeImpl<T> retListHead = head;
+            LinkedListNodeImpl<T> current = head.Next, currentPrevious = head;
             int retListLen = 1;
             while (current != null)
             {
-                Node iterationPtr = retListHead, iterationPrevPtr = null;
+                LinkedListNodeImpl<T> iterationPtr = retListHead, iterationPrevPtr = null;
                 bool alreadyCorrectPos = true;
                 for (int i = 0; i < retListLen; i++)
                 {
@@ -311,20 +299,20 @@ namespace Learning.Libs.DataStructures
             return retListHead;
         }
 
-        private Node MergeSort(Node head)
+        private LinkedListNodeImpl<T> MergeSort(LinkedListNodeImpl<T> head)
         {
             FunctionCost funcCost = new FunctionCost();
             funcCost.NumComparisons++;
             _sortingStats.MergeSortCosts.Add(funcCost);
             if (head.Next != null)
             {
-                Node mid = Mid(head);
-                Node l1 = head;
+                LinkedListNodeImpl<T> mid = Mid(head);
+                LinkedListNodeImpl<T> l1 = head;
                 if (l1.Next != null)
                 {
                     l1 =  MergeSort(head);
                 }
-                Node l2 = mid;
+                LinkedListNodeImpl<T> l2 = mid;
                 if (l2.Next != null)
                 {
                     l2 = MergeSort(mid);
@@ -337,11 +325,11 @@ namespace Learning.Libs.DataStructures
             }
         }
 
-        private Node Mid(Node head)
+        private LinkedListNodeImpl<T> Mid(LinkedListNodeImpl<T> head)
         {
             FunctionCost funcCost = new FunctionCost();
-            Node slowPtr = head;
-            Node fastPtr = head.Next.Next;
+            LinkedListNodeImpl<T> slowPtr = head;
+            LinkedListNodeImpl<T> fastPtr = head.Next.Next;
             funcCost.NumPropertyAccesses += 2;
             funcCost.NumComparisons++;
             if (fastPtr != null)
@@ -360,7 +348,7 @@ namespace Learning.Libs.DataStructures
                 }
             }
 
-            Node tmp = slowPtr;
+            LinkedListNodeImpl<T> tmp = slowPtr;
             slowPtr = slowPtr.Next;
             tmp.Next = null;
             funcCost.NumPropertyAccesses += 2;
@@ -368,7 +356,7 @@ namespace Learning.Libs.DataStructures
             return slowPtr;
         }
 
-        private Node Merge(Node head1, Node head2)
+        private LinkedListNodeImpl<T> Merge(LinkedListNodeImpl<T> head1, LinkedListNodeImpl<T> head2)
         {
             FunctionCost funcCost = new FunctionCost();
             _sortingStats.MergeCosts.Add(funcCost);
@@ -383,10 +371,10 @@ namespace Learning.Libs.DataStructures
                 return head2;
             }
 
-            Node retListHead = head1;
+            LinkedListNodeImpl<T> retListHead = head1;
             funcCost.NumPropertyAccesses++;
-            Node current1 = head1.Next;
-            Node current2 = head2;
+            LinkedListNodeImpl<T> current1 = head1.Next;
+            LinkedListNodeImpl<T> current2 = head2;
             bool onList1 = true;
             funcCost.NumComparisons++;
             if (head2.Data.CompareTo(head1.Data) < 0)
@@ -397,7 +385,7 @@ namespace Learning.Libs.DataStructures
                 current2 = head2.Next;
                 onList1 = false;
             }
-            Node retListTail = retListHead;
+            LinkedListNodeImpl<T> retListTail = retListHead;
             while(current1 != null && current2 != null)
             {
                 funcCost.NumComparisons += 3;
