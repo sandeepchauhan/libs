@@ -15,21 +15,22 @@ namespace Learning.Libs.DataStructures
 
     public class SortingStatistics
     {
-        public List<FunctionCost> MergeSortCosts = new List<FunctionCost>();
-
-        public List<FunctionCost> MidCosts = new List<FunctionCost>();
-
-        public List<FunctionCost> MergeCosts = new List<FunctionCost>();
-
         public int NumComparisons;
 
         public int NumSwaps;
 
         public int MaxRecursionDepth;
 
+        public long TimeTaken;
+
         private int _currentRecursionDepth;
 
         private static SortingStatistics _instance;
+
+        private SortingStatistics()
+        {
+
+        }
 
         public static SortingStatistics Instance
         {

@@ -54,7 +54,7 @@ namespace Learning.Libs.DataStructures
                     break;
                 }
             }
-            Console.WriteLine("Time taken: " + sw.ElapsedMilliseconds);
+            SortingStatistics.Instance.TimeTaken = sw.ElapsedMilliseconds;
             SortingStatistics.Instance.Print();
         }
 

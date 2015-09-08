@@ -6,31 +6,67 @@
             @for (int i = 0; i < Model.SortingAlgorithms.Count; i++)
             {
                 <li>
-                    @Html.CheckBoxFor(m => m.SortingAlgorithms[i].Checked, new { id = Model.SortingAlgorithms[i].Text })
-                    @Html.DisplayFor(m => m.SortingAlgorithms[i].Text)
+                    <input name="@Model.SortingAlgorithms[i].Text" type="checkbox" /> @Model.SortingAlgorithms[i].Text
                 </li>
             }
         </ul>
     </div>
     <div>
-        <p>Number of elements: </p><input type="number" id="numElements" />
+        <p>Number of elements: </p><input type="number" name="numElements" id="numElements" />
     </div>
     <br />
     <br />
     <button onclick="func()">Submit</button>
 </div>
+<div id="Results">
+    <table>
+        <thead>
+            <tr>
+                <th>Number of Elements</th>
+                <th>Algorithm</th>
+                <th>Algorithm Version</th>
+                <th>Input Type</th>
+                <th>Time Taken</th>
+                <th>Comparisons</th>
+                <th>Swaps</th>
+                <th>Recursion Depth</th>
+            </tr>
+        </thead>
+    </table>
+</div>
 <script type="text/javascript">
+    var host = window.location.host;
+    var baseURLOfHomeController = "http://" + host + "/Home";
     function func() {
-        var sortingAlgorithm;
-        var sortingAlgorithmListItems = document.getElementById("sortingAlgorithmsList").getElementsByTagName("li");
+        var xmlhttp = new XMLHttpRequest();
+        var sortingAlgorithms = "";
+        var sortingAlgorithmListItems = document.getElementById("sortingAlgorithmsList").getElementsByTagName("input");
         for (var i = 0; i < sortingAlgorithmListItems.length; i++)
         {
-            if (sortingAlgorithmListItems[i].Checked)
-            {
-                sortingAlgorithm = sortingAlgorithmListItems[i].Text;
+            if (sortingAlgorithmListItems[i].type == "checkbox") {
+                if (sortingAlgorithmListItems[i].checked) {
+                    sortingAlgorithms = sortingAlgorithms + sortingAlgorithmListItems[i].name + ";";
+                }
             }
         }
-        var numElements = document.getElementById("numElements").value;
 
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    var jsList = JSON.parse(xmlhttp.responseText);
+                    var html = "";
+                    for (var i = 0; i < jsList.length; i++) {
+                        html += "<li><a onclick=\"showMeaning('" + jsList[i] + "')\">" + jsList[i] + "</a></li>";
+                    }
+                    document.getElementById("suggestionsList").innerHTML = html;
+                    document.getElementById("suggestionsList").style.visibility = "visible";
+                    document.getElementById("suggestionsCallTimeTaken").innerHTML = "Time taken by last suggestions call: " + timeTaken;
+                }
+            }
+        }
+
+        var numElements = document.getElementById("numElements").value;
+        xmlhttp.open("GET", baseURLOfHomeController + "/DoSorting?sortingAlgorithms=" + sortingAlgorithms + "&numElements=" + numElements);
+        xmlhttp.send();
     }
 </script>
