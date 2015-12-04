@@ -8,6 +8,54 @@ namespace Learning.Libs.DataStructures
 {
     public class ArrayString : ArrayImpl<char>
     {
+        public ArrayString(string s) : base(s.Length)
+        {
+            foreach(char c in s)
+            {
+                Add(c);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 0;
+            unchecked
+            {
+                foreach (char c in this)
+                {
+                    hash = (17 * hash) + c;
+                }
+            }
+
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool retVal = false;
+            if (obj != null && obj.GetType() == typeof(ArrayString))
+            {
+                ArrayString s1 = obj as ArrayString;
+                if (s1.Size() == this.Size())
+                {
+                    int i = 0;
+                    for (i = 0; i < this.Size(); i++)
+                    {
+                        if (this._array[i] != s1._array[i])
+                        {
+                            break;
+                        }
+                    }
+                    if (i == this.Size())
+                    {
+                        retVal = true;
+                    }
+                }
+            }
+
+            return retVal;
+        }
+
         public static List<string> GetPermutations(string str)
         {
             List<string> permutations = new List<string>();

@@ -18,6 +18,26 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
+            int x = -6;
+            Console.WriteLine(GetBits(x));
+            Console.ReadKey();
+        }
+        
+        private static string GetBits(int x)
+        {
+            string ret = "";
+            while (x != 0)
+            {
+                int rem = x % 2;
+                ret = rem + " " + ret;
+                x = x / 2;
+            }
+
+            return ret;
+        }
+
+        static void Main1(string[] args)
+        {
             List<LinkedListNodeImpl<Guid>> l = new List<LinkedListNodeImpl<Guid>>();
             while(true)
             {

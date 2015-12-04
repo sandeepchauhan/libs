@@ -38,7 +38,7 @@ namespace WebApplication.Controllers
             ISortableCollection<int> collection = new ArrayImpl<int>(numElements);
             collection.AddMany(GetInput<int>(sa, numElements, SortInputType.Random));
             collection.Sort(sa, SortingAlgorithmType.Iterative);
-            JsonResult ret = Json(suggestions, JsonRequestBehavior.AllowGet);
+            JsonResult ret = Json(collection, JsonRequestBehavior.AllowGet);
             return ret;
         }
 

@@ -1,42 +1,59 @@
 ﻿@model WebApplication.Models.HomePageModel
-<div>
-    <div>Select sorting algortihm(s)</div>
-    <div>
-        <ul class="horizontal-list" id="sortingAlgorithmsList">
-            @for (int i = 0; i < Model.SortingAlgorithms.Count; i++)
-            {
-                <li>
-                    <input name="@Model.SortingAlgorithms[i].Text" type="checkbox" /> @Model.SortingAlgorithms[i].Text
-                </li>
-            }
-        </ul>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="#demo1" data-parent="#accordion" data-toggle="collapse">Hashing</a>
+        </div>
+        <div id="demo1" class="panel-collapse collapse in">
+            Lorem ipsum dolor text....
+        </div>
     </div>
-    <div>
-        <p>Number of elements: </p><input type="number" name="numElements" id="numElements" />
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="#demo2" data-parent="#accordion" data-toggle="collapse">Sorting</a>
+        </div>
+        <div id="demo2" class="panel-collapse collapse">
+            <div>Select sorting algortihm(s)</div>
+            <div>
+                <ul class="horizontal-list" id="sortingAlgorithmsList">
+                    @for (int i = 0; i < Model.SortingAlgorithms.Count; i++)
+                    {
+                        <li>
+                            <input name="@Model.SortingAlgorithms[i].Text" type="checkbox" /> @Model.SortingAlgorithms[i].Text
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <p>Number of elements: </p><input type="number" name="numElements" id="numElements" />
+            </div>
+            <button onclick="func()">Submit</button>
+            <br />
+            <br />
+            <div id="ResultsDiv">
+                <table id="ResultsTable">
+                    <thead>
+                        <tr>
+                            <th>Number of Elements</th>
+                            <th>Algorithm</th>
+                            <th>Algorithm Version</th>
+                            <th>Input Type</th>
+                            <th>Time Taken</th>
+                            <th>Comparisons</th>
+                            <th>Swaps</th>
+                            <th>Recursion Depth</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
-    <br />
-    <br />
-    <button onclick="func()">Submit</button>
-</div>
-<div id="Results">
-    <table>
-        <thead>
-            <tr>
-                <th>Number of Elements</th>
-                <th>Algorithm</th>
-                <th>Algorithm Version</th>
-                <th>Input Type</th>
-                <th>Time Taken</th>
-                <th>Comparisons</th>
-                <th>Swaps</th>
-                <th>Recursion Depth</th>
-            </tr>
-        </thead>
-    </table>
 </div>
 <script type="text/javascript">
     var host = window.location.host;
     var baseURLOfHomeController = "http://" + host + "/Home";
+    var resultsTable = document.getElementById("ResultsTable");
     function func() {
         var xmlhttp = new XMLHttpRequest();
         var sortingAlgorithms = "";
@@ -54,13 +71,10 @@
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     var jsList = JSON.parse(xmlhttp.responseText);
-                    var html = "";
-                    for (var i = 0; i < jsList.length; i++) {
-                        html += "<li><a onclick=\"showMeaning('" + jsList[i] + "')\">" + jsList[i] + "</a></li>";
-                    }
-                    document.getElementById("suggestionsList").innerHTML = html;
-                    document.getElementById("suggestionsList").style.visibility = "visible";
-                    document.getElementById("suggestionsCallTimeTaken").innerHTML = "Time taken by last suggestions call: " + timeTaken;
+                    var html = "<tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>6</th><th>6</th></tr>";
+                    var row = resultsTable.insertRow(1);
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = "ddd";
                 }
             }
         }

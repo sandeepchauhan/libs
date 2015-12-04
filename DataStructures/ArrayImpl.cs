@@ -11,7 +11,7 @@ namespace Learning.Libs.DataStructures
 {
     public class ArrayImpl<T> : SortableCollectionBase<T> where T : IComparable<T>
     {
-        private T[] _array;
+        protected T[] _array;
 
         private T[] _auxArray;
 
@@ -23,6 +23,11 @@ namespace Learning.Libs.DataStructures
         {
             _capacity = capacity;
             _array = new T[capacity];
+        }
+
+        public int Size()
+        {
+            return _size;
         }
 
         public override void Add(T data)

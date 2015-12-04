@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3CEA7758-9255-4821-A43E-6914FB1B626B}</ProjectGuid>
+    <ProjectGuid>{C4482BDF-EEB0-4746-8BD7-5AE75035FB2A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Learning.Libs.DataStructures</RootNamespace>
-    <AssemblyName>Learning.Libs.DataStructures</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>ApplicationModels</RootNamespace>
+    <AssemblyName>ApplicationModels</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -39,27 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayImpl.cs" />
-    <Compile Include="ArrayString.cs" />
-    <Compile Include="ComparerImpl.cs" />
-    <Compile Include="CustomString.cs" />
-    <Compile Include="DataProviderForSortAlgorithms.cs" />
-    <Compile Include="Enums\SortingAlgorithmType.cs" />
-    <Compile Include="Enums\StringHashAlgo.cs" />
-    <Compile Include="HashTable.cs" />
-    <Compile Include="Heap.cs" />
-    <Compile Include="Interfaces\ISortableCollection.cs" />
-    <Compile Include="Interfaces\IStringDictionary.cs" />
-    <Compile Include="LinkedListImpl.cs" />
-    <Compile Include="LinkedListNodeImpl.cs" />
-    <Compile Include="SortableCollectionBase.cs" />
-    <Compile Include="Enums\SortingAlgorithm.cs" />
-    <Compile Include="SortingScenario.cs" />
-    <Compile Include="SortingStatistics.cs" />
-    <Compile Include="Enums\SortInputType.cs" />
-    <Compile Include="StringHashTable.cs" />
-    <Compile Include="Trie.cs" />
+    <Compile Include="StringHashFuncPerfModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataStructures\DataStructures.csproj">
+      <Project>{3cea7758-9255-4821-a43e-6914fb1b626b}</Project>
+      <Name>DataStructures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

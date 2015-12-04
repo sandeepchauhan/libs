@@ -303,7 +303,6 @@ namespace Learning.Libs.DataStructures
         {
             FunctionCost funcCost = new FunctionCost();
             funcCost.NumComparisons++;
-            _sortingStats.MergeSortCosts.Add(funcCost);
             if (head.Next != null)
             {
                 LinkedListNodeImpl<T> mid = Mid(head);
@@ -352,14 +351,12 @@ namespace Learning.Libs.DataStructures
             slowPtr = slowPtr.Next;
             tmp.Next = null;
             funcCost.NumPropertyAccesses += 2;
-            _sortingStats.MidCosts.Add(funcCost);
             return slowPtr;
         }
 
         private LinkedListNodeImpl<T> Merge(LinkedListNodeImpl<T> head1, LinkedListNodeImpl<T> head2)
         {
             FunctionCost funcCost = new FunctionCost();
-            _sortingStats.MergeCosts.Add(funcCost);
             funcCost.NumComparisons++;
             if (head2 == null)
             {
