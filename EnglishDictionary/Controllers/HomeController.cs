@@ -1,4 +1,5 @@
-﻿using EnglishDictionary.Models;
+﻿using DictionaryConsoleApp;
+using EnglishDictionary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +10,11 @@ namespace EnglishDictionary.Controllers
 {
     public class HomeController : Controller
     {
+        private TrieDictionary _trieDictionary = new TrieDictionary(@"D:\gitrepos\myrepos\resources\EnglishDictionary-Processed.txt");
+
         public ActionResult Index()
         {
-            ViewBag.Title = Model.Dictionary.GetStats();
             return View();
-        }
-
-        public ActionResult Meaning(string word)
-        {
-            string meaning = Model.Dictionary.GetData(word);
-            return Content(meaning);
-        }
-
-        public ActionResult Suggestions(string word)
-        {
-            IEnumerable<string> suggestions = Model.Dictionary.GetSuggestions(word);
-            JsonResult ret = Json(suggestions, JsonRequestBehavior.AllowGet);
-            return ret;
         }
     }
 }

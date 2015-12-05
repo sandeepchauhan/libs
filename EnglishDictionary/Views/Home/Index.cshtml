@@ -16,7 +16,7 @@
 </div>
 <script type="text/javascript">
     var host = window.location.host;
-    var baseURLOfHomeController = "http://" + host + "/Home";
+    var baseURLOfHomeController = "http://" + host + "/api";
     var startTime;
     var timeTaken;
     function func(event)
@@ -46,7 +46,7 @@
                 }
             }
 
-            xmlhttp.open("GET", baseURLOfHomeController + "/Suggestions?word=" + input + "&timestamp=" + (new Date()).getTime(), true);
+            xmlhttp.open("GET", baseURLOfHomeController + "/suggestions?word=" + input + "&timestamp=" + (new Date()).getTime(), true);
             startTime = (new Date()).getTime();
             xmlhttp.send();
         }
@@ -67,7 +67,7 @@
             }
         }
 
-        var url = baseURLOfHomeController + "/Meaning?word=" + word + "&timestamp=" + (new Date()).getTime();
+        var url = baseURLOfHomeController + "/meaning?word=" + word + "&timestamp=" + (new Date()).getTime();
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     }

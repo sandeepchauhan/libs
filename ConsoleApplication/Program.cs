@@ -262,7 +262,7 @@ namespace DictionaryConsoleApp
             while (true)
             {
                 string word = Console.ReadLine();
-                string meaning = trieDictionary.GetData(word);
+                string meaning = trieDictionary.GetMeaning(word);
                 if (string.IsNullOrWhiteSpace(meaning))
                 {
                     meaning = "Word not found!";
