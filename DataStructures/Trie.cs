@@ -10,77 +10,82 @@ namespace Learning.Libs.DataStructures
     /// <summary>
     /// Size coming around 46 MB with 266091 nodes.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class Trie<T> : IStringDictionary<T>
+    public class Trie
     {
-        private List<Tuple<string, T>> _dataList = new List<Tuple<string, T>>();
-
         /// <summary>
         /// Avg size coming as 174 bytes.
         /// </summary>
         [Serializable]
-        public class Node
+        private class Node
         {
             public static int InstanceCount = 0;
 
             public char Value { get; set; }
 
-            public int ListIndex { get; set; }
+            /// <summary>
+            /// Starting indexes in the source text where word corresponding to this node
+            /// exists.
+            /// </summary>
+            public List<int> SourceIndexes { get; set; }
 
             public Node[] childNodes { get; set; }
 
             public bool IsRootNode { get; set; }
 
-            public Node(bool IsRootNode = false)
+            public Node(Trie trie, bool IsRootNode = false)
             {
                 this.IsRootNode = IsRootNode;
-                this.ListIndex = -1;
-                InstanceCount++;
+                trie._numNodes++;
             }
         }
 
         private Node _rootNode;
 
-        public Trie()
-        {
-            _rootNode = new Node(true);
-        }
+        private int _numNodes;
 
-        public T GetData(string word)
+        public IEnumerable<int> FindWord(string word)
         {
-            Node currNode = _rootNode;
-            char[] arr = word.ToArray();
-            T retVal = default(T);
-            foreach (char c in arr)
+            List<int> retVal = new List<int>();
+            if (_rootNode != null)
             {
-                if (currNode.childNodes == null)
+                Node currNode = _rootNode;
+                char[] arr = word.ToArray();
+                foreach (char c in arr)
                 {
-                    currNode = null;
-                    break;
+                    if (currNode.childNodes == null)
+                    {
+                        currNode = null;
+                        break;
+                    }
+
+                    char lowerCaseChar = Char.ToLowerInvariant(c);
+                    int index = lowerCaseChar - 'a';
+                    if (currNode.childNodes[index] == null)
+                    {
+                        currNode = null;
+                        break;
+                    }
+
+                    currNode = currNode.childNodes[index];
                 }
 
-                char lowerCaseChar = Char.ToLowerInvariant(c);
-                int index = lowerCaseChar - 'a';
-                if (currNode.childNodes[index] == null)
+                if (currNode != null && currNode.SourceIndexes != null)
                 {
-                    currNode = null;
-                    break;
+                    retVal = currNode.SourceIndexes;
                 }
-
-                currNode = currNode.childNodes[index];
-            }
-
-            if (currNode != null && currNode.ListIndex != -1)
-            {
-                retVal = _dataList[currNode.ListIndex].Item2;
             }
 
             return retVal;
         }
 
-        public IEnumerable<string> GetSuggestions(string word)
+        public IEnumerable<int> GetSuggestions(string word)
         {
+            if (_rootNode == null)
+            {
+                return new List<int>();
+            }
+
             Node currNode = _rootNode;
             char[] arr = word.ToArray();
             foreach (char c in arr)
@@ -102,38 +107,40 @@ namespace Learning.Libs.DataStructures
                 currNode = currNode.childNodes[index];
             }
 
-            return GetWords(currNode);
+            return GetAllWordsInTree(currNode);
         }
 
-        private List<string> GetWords(Node node)
+        private IEnumerable<int> GetAllWordsInTree(Node node)
         {
-            if (node == null)
+            List<int> retVal = new List<int>();
+            if (node != null)
             {
-                return new List<string>();
-            }
+                if (node.SourceIndexes != null)
+                {
+                    retVal.AddRange(node.SourceIndexes);
+                }
 
-            List<string> words = new List<string>();
-            if (node.ListIndex != -1)
-            {
-                words.Add(_dataList[node.ListIndex].Item1);
-            }
-
-            if (node.childNodes != null)
-            {
-                foreach(Node cn in node.childNodes)
-                {   
-                    words.AddRange(GetWords(cn));
+                if (node.childNodes != null)
+                {
+                    foreach (Node cn in node.childNodes)
+                    {
+                        retVal.AddRange(GetAllWordsInTree(cn));
+                    }
                 }
             }
 
-            return words;
+            return retVal;
         }
 
-        public bool TryAddWord(string word, T data)
+        public void AddWord(string word, int indexInSourceText)
         {
+            if (_rootNode == null)
+            {
+                _rootNode = new Node(this, true);
+            }
+
             Node currNode = _rootNode;
             char[] arr = word.ToArray();
-            bool wordAlreadyPresent = true;
             foreach(char c in arr)
             {
                 if (currNode.childNodes == null)
@@ -145,36 +152,29 @@ namespace Learning.Libs.DataStructures
                 int index = lowerCaseChar - 'a';
                 if (currNode.childNodes[index] == null)
                 {
-                    currNode.childNodes[index] = new Node();
+                    currNode.childNodes[index] = new Node(this);
                     currNode.childNodes[index].Value = lowerCaseChar;
-                    wordAlreadyPresent = false;
                 }
 
                 currNode = currNode.childNodes[index];
             }
 
-            if (wordAlreadyPresent && currNode.ListIndex == -1)
+            if (currNode.SourceIndexes == null)
             {
-                wordAlreadyPresent = false;
+                currNode.SourceIndexes = new List<int>();
             }
 
-            if (!wordAlreadyPresent)
-            {
-                _dataList.Add(new Tuple<string, T>(word, data));
-                currNode.ListIndex = _dataList.Count - 1;
-            }
-
-            return !wordAlreadyPresent;
+            currNode.SourceIndexes.Add(indexInSourceText);
         }
 
         public int GetNumNodes()
         {
-            return Node.InstanceCount;
+            return _numNodes;
         }
 
         public int GetNumWords()
         {
-            return _dataList.Count;
+            return GetAllWordsInTree(_rootNode).Count();
         }
 
         public string GetStats()

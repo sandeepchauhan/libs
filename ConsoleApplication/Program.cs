@@ -11,6 +11,7 @@ using Learning.Libs.DataStructures.Interfaces;
 using System.Diagnostics;
 using Learning.Libs.DataStructures.Enums;
 using System.Threading;
+using Learning.Libs.Utils;
 
 namespace DictionaryConsoleApp
 {
@@ -18,8 +19,18 @@ namespace DictionaryConsoleApp
     {
         static void Main(string[] args)
         {
-            int x = -6;
-            Console.WriteLine(GetBits(x));
+            int[] arr = UtilityMethods.ShuffledArrayOfFirstNNaturalNumbers(10);
+            arr.PrintArray();
+            Heap<int> heap = new Heap<int>(arr);
+            heap.Sort(SortingAlgorithm.HeapSort, SortingAlgorithmType.Iterative);
+            int i = 0;
+            foreach(int x in heap)
+            {
+                arr[i++] = x;
+            }
+            arr.PrintArray();
+            //int x = -6;
+            //Console.WriteLine(GetBits(x));
             Console.ReadKey();
         }
         
@@ -247,7 +258,7 @@ namespace DictionaryConsoleApp
         {
             bool isPrime = IsPrime(4111);
             DictionarySanitizer.WriteSanitizedDictionary();
-            Trie<string> trieDictionary = TrieDictionary.Populate();
+            TrieDictionary trieDictionary = new TrieDictionary(@"D:\gitrepos\myrepos\resources\EnglishDictionary-Processed.txt");
             while (true)
             {
                 string word = Console.ReadLine();

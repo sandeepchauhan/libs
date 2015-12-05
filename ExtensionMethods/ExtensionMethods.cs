@@ -19,5 +19,17 @@ namespace Learning.Libs.ExtensionMethods
                 return s.Length;
             }
         }
+
+        public static void PrintArray(this int[] arr)
+        {
+            StringBuilder sb = new StringBuilder("");
+            int i = 0;
+            while(i < arr.Length)
+            {
+                sb.Append(arr[i++] + "  ");
+            }
+
+            Console.WriteLine(sb.ToString());
+        }
     }
 }

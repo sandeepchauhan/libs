@@ -13,14 +13,20 @@ namespace Learning.Libs.DataStructures
 
         private int _size;
 
-        public Heap()
+        public Heap(IEnumerable<T> items)
         {
-            _array = new T[512];
+            _size = items.Count();
+            _array = new T[_size];
+            int i = 0;
+            foreach(T item in items)
+            {
+                _array[i++] = item;
+            }
         }
 
         public override void Add(T data)
         {
-            _array[_size++] = data;
+            throw new NotImplementedException();
         }
 
         protected override void SortInternal(SortingAlgorithm sortingAlgorithm, SortingAlgorithmType sortingAlgorithmType)
@@ -52,17 +58,26 @@ namespace Learning.Libs.DataStructures
             {
                 int lc = GetLeftChild(node);
                 int rc = GetRightChild(node);
-                if (lc < _size && (_array[lc].CompareTo(_array[rc]) < 0) && (_array[node].CompareTo(_array[lc]) > 0))
+                if (lc < _size)
                 {
-                    // Left child is smaller
-                    Swap(node, lc);
-                    node = lc;
-                }
-                else if (rc < _size && (_array[node].CompareTo(_array[rc]) > 0))
-                {
-                    // Right child is smaller
-                    Swap(node, rc);
-                    node = rc;
+                    int smallest = node;
+                    if(_array[lc].CompareTo(_array[node]) < 0)
+                    {
+                        smallest = lc;
+                    }
+                    if (rc < _size && _array[rc].CompareTo(_array[smallest]) < 0)
+                    {
+                        smallest = rc;
+                    }
+                    if (smallest != node)
+                    {
+                        Swap(node, smallest);
+                        node = smallest;
+                    }
+                    else
+                    {
+                        node = -1;
+                    }
                 }
                 else
                 {

@@ -11,25 +11,32 @@ namespace DictionaryConsoleApp
 {
     class TrieDictionary
     {
-        public static Trie<string> Populate()
+        private Tuple<string, string>[] _wordMeanings;
+
+        private Trie _trie;
+
+        public TrieDictionary(string filePath)
         {
-            Trie<string> trie = new Trie<string>();
-            int insertions = 0;
-            string[] lines = File.ReadAllLines(@"D:\gitrepos\myrepos\resources\EnglishDictionary1.txt");
+            string[] lines = File.ReadAllLines(@"D:\gitrepos\myrepos\resources\EnglishDictionary-Processed.txt");
+            _wordMeanings = new Tuple<string, string>[lines.Length];
+            int index = 0;
             foreach (string l in lines)
             {
                 string[] parts = l.Split(new string[] { "======" }, StringSplitOptions.None);
                 string word = parts[0].Trim();
                 if (Regex.IsMatch(word, @"^[a-zA-Z]+$"))
                 {
-                    if (trie.TryAddWord(word, parts[1].Trim()))
-                    {
-                        insertions++;
-                    }
+                    _wordMeanings[index++] = new Tuple<string, string>(word, parts[1].Trim());
                 }
             }
+        }
 
-            return trie;
+        public Trie Trie
+        {
+            get
+            {
+                return _trie;
+            }
         }
     }
 }
