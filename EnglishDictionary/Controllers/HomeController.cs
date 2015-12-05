@@ -10,9 +10,13 @@ namespace EnglishDictionary.Controllers
 {
     public class HomeController : Controller
     {
-        private TrieDictionary _trieDictionary = new TrieDictionary(@"D:\gitrepos\myrepos\resources\EnglishDictionary-Processed.txt");
-
         public ActionResult Index()
+        {
+            ViewBag.Title = ModelWrapper.TrieDictionary.Stats();
+            return View();
+        }
+
+        public ActionResult Editor()
         {
             return View();
         }

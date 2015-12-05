@@ -62,5 +62,10 @@ namespace DictionaryConsoleApp
 
             return ret;
         }
+
+        public string Stats()
+        {
+            return "Number of words: " + _trie.GetNumWords() + ", nodes: " + _trie.GetNumNodes(); 
+        }
     }
 }
