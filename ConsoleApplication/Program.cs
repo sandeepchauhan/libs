@@ -19,7 +19,7 @@ namespace DictionaryConsoleApp
             //ElasticSearch.ExecuteScenario();
             var longs = UtilityMethods.GenerateRandomLongs(1 << 20);
             var list = longs.Select(a => a.ToString());
-            File.WriteAllLines(@"D:\gitrepos\myrepos\resources\RandomLongs3.txt", list);
+            File.WriteAllLines(@"D:\gitrepos\myrepos\resources\RandomLongs4.txt", list);
             Console.ReadKey();
         }
     }
