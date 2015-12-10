@@ -13,3 +13,4 @@ function func() {
     var input = document.getElementById("searchText").nodeValue;
     var highlighter = new MatchHighlighter(input);
 }
+//# sourceMappingURL=TextEditor.js.map

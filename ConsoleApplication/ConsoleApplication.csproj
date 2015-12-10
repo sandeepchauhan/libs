@@ -61,6 +61,10 @@
       <Project>{3671937c-8219-4f12-b531-fc0c5c2e272a}</Project>
       <Name>ExtensionMethods</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProblemSolutions\ProblemSolutions.csproj">
+      <Project>{87283ca0-296e-4112-95f6-a29b419b95d9}</Project>
+      <Name>ProblemSolutions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils\Utils.csproj">
       <Project>{875a10a2-2e46-4c3f-813c-f9deddceb2ed}</Project>
       <Name>Utils</Name>

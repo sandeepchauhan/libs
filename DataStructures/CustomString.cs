@@ -23,15 +23,15 @@ namespace Learning.Libs.DataStructures
 
         public override int GetHashCode()
         {
-            int hashCode = 0;
+            uint hashCode = 5381;
             for (int i = 0; i < _length; i++)
             {
                 char c = _value[i];
-                int asciiVal = (int) c;
-                hashCode += (asciiVal * (int) Math.Pow(PRIME, i));
+                uint asciiVal = (uint) c;
+                hashCode += (hashCode << 5) + asciiVal;
             }
 
-            return hashCode;
+            return (int) hashCode;
         }
 
         public override bool Equals(object obj)

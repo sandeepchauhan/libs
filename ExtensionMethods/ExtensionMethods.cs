@@ -31,5 +31,70 @@ namespace Learning.Libs.ExtensionMethods
 
             Console.WriteLine(sb.ToString());
         }
+
+        public static List<short> GetOnePositions(this long l)
+        {
+            List<short> ret = new List<short>();
+            short pos = 64;
+            long mask = 1;
+            while(pos >= 1)
+            {
+                if ((l & mask) != 0)
+                {
+                    ret.Add(pos);
+                }
+                pos--;
+                mask = mask << 1;
+            }
+
+            ret.Reverse();
+            return ret;
+        }
+
+        public static string GetBinaryRepresentation(this int num)
+        {
+            string s = string.Empty;
+            int mask = 1;
+            int currBit = 1;
+            while(currBit <= 32)
+            {
+                if ((num & mask) != 0)
+                {
+                    s += '1';
+                }
+                else
+                {
+                    s += '0';
+                }
+
+                mask = mask << 1;
+                currBit++;
+            }
+
+            return new string(s.Reverse().ToArray());
+        }
+
+        public static string GetBinaryRepresentation(this long num)
+        {
+            string s = string.Empty;
+            int mask = 1;
+            int currBit = 1;
+            while (currBit <= 64)
+            {
+                if ((num & mask) != 0)
+                {
+                    s += '1';
+                }
+                else
+                {
+                    s += '0';
+                }
+
+                mask = mask << 1;
+                currBit++;
+            }
+
+            return new string(s.Reverse().ToArray());
+        }
     }
 }
