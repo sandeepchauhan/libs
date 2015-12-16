@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Learning.Libs.DataStructures.Interfaces;
+using Learning.Libs.Utils;
+using System.Diagnostics;
 
 namespace Learning.Libs.DataStructures
 {
@@ -24,7 +26,7 @@ namespace Learning.Libs.DataStructures
             public char Value { get; set; }
 
             /// <summary>
-            /// Starting indexes in the source text where word corresponding to this node
+            /// Locations in the source text where word corresponding to this node
             /// exists.
             /// </summary>
             public List<int> SourceIndexes { get; set; }
@@ -130,6 +132,110 @@ namespace Learning.Libs.DataStructures
             }
 
             return retVal;
+        }
+
+        public Tuple<IEnumerable<int>, FunctionPerfData> GetCorrections(string word)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            FunctionPerfData fpd = new FunctionPerfData();
+
+            #region Get corrections with edit distance 1
+            FunctionPerfData stagePerfData = new FunctionPerfData();
+            fpd.StagesPerfData.Add("GetCandidates1", stagePerfData);
+            HashSet<int> ret = new HashSet<int>();
+            Stopwatch sws = new Stopwatch();
+            sws.Start();
+            List<string> candidates = GetCorrectionsWithEditDistanceOne(word).ToList();
+            sws.Stop();
+            stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
+            stagePerfData.OtherData.Add("Num Actual Candidates", candidates.Count);
+            stagePerfData.OtherData.Add("Num Candidates Formula", "52N + 25");
+            stagePerfData.OtherData.Add("Num Candidates by Formula", (52 * word.Length + 25));
+            #endregion
+            #region Get corrections with edit distance 2
+            sws.Restart();
+            stagePerfData = new FunctionPerfData();
+            fpd.StagesPerfData.Add("GetCandidates2", stagePerfData);
+            List<string> copy = new List<string>(candidates);
+            foreach (string c in copy)
+            {
+                candidates.AddRange(GetCorrectionsWithEditDistanceOne(c));
+            }
+            sws.Stop();
+            stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
+            stagePerfData.OtherData.Add("Num Actual Candidates", candidates.Count);
+            stagePerfData.OtherData.Add("Num Candidates Formula", "(52N + 25)(52N + 25)");
+            stagePerfData.OtherData.Add("Num Candidates by Formula", (52 * word.Length + 25) * (52 * word.Length + 25));
+            #endregion
+            #region Get unique candidates
+            sws.Restart();
+            stagePerfData = new FunctionPerfData();
+            fpd.StagesPerfData.Add("GetCandidatesUnique", stagePerfData);
+            HashSet<string> hs = new HashSet<string>(candidates);
+            stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
+            stagePerfData.OtherData.Add("Unique Candidates", hs.Count);
+            #endregion
+            #region Filter valid candidates
+            sws.Restart();
+            stagePerfData = new FunctionPerfData();
+            fpd.StagesPerfData.Add("FilterValidCandidates", stagePerfData);
+            foreach(string c in hs)
+            {
+                var positions = this.FindWord(c);
+                if(positions.Any())
+                {
+                    ret.Add(positions.First());
+                }
+            }
+            stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
+            #endregion
+
+            fpd.TimeTaken = sw.ElapsedMilliseconds;
+            return new Tuple<IEnumerable<int>,FunctionPerfData>(ret.AsEnumerable(), fpd);
+        }
+
+        // Assuming N as word length. Output can contain upto (26(N+1) - N + 25N + N + (N-1)) = 52N + 25 words.
+        private HashSet<string> GetCorrectionsWithEditDistanceOne(string word)
+        {
+            HashSet<string> ret = new HashSet<string>();
+            for (int i = 0; i <= word.Length; i++)
+            {
+                // Insertions
+                foreach(char c in Constants.EnglishAlphabet)
+                {
+                    ret.Add(word.Insert(i, c + ""));
+                }
+                // Replacements
+                if (i != word.Length)
+                {
+                    char[] arr = word.ToCharArray();
+                    foreach (char c in Constants.EnglishAlphabet)
+                    {
+                        if (c != word[i])
+                        {
+                            arr[i] = c;
+                            ret.Add(new string(arr));
+                        }
+                    }
+                }
+                // Deletions
+                if (i != word.Length)
+                {
+                    ret.Add(word.Remove(i, 1));
+                }
+                // Transposes
+                if (i < word.Length - 1)
+                {
+                    char[] arr = word.ToCharArray();
+                    char tmp = arr[i];
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = tmp;
+                    ret.Add(new string(arr));
+                }
+            }
+
+            return ret;
         }
 
         public void AddWord(string word, int indexInSourceText)

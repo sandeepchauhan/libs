@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="GUIDUtils.cs" />
+    <Compile Include="LongMasks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomBool.cs" />
     <Compile Include="RandomImpl.cs" />

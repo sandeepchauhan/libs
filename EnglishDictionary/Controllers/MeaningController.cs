@@ -13,7 +13,13 @@ namespace EnglishDictionary.Controllers
         // GET api/meaning/apple
         public string Get(string word)
         {
-            return ModelWrapper.TrieDictionary.GetMeaning(word);
+            string meaning  = ModelWrapper.TrieDictionary.GetMeaning(word);
+            if (string.IsNullOrWhiteSpace(meaning))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return meaning;
         }
     }
 }

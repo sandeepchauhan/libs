@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Learning.Libs.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,22 +33,98 @@ namespace Learning.Libs.ExtensionMethods
             Console.WriteLine(sb.ToString());
         }
 
-        public static List<short> GetOnePositions(this long l)
+        // 400 ms
+        public static List<short> GetOnePositionsV5(this long l, List<int> list, int baseVal, long[] masks)
         {
-            List<short> ret = new List<short>();
-            short pos = 64;
-            long mask = 1;
-            while(pos >= 1)
+            short bitNumber = 1;
+            while (bitNumber <= 64)
             {
-                if ((l & mask) != 0)
+                if ((l & masks[bitNumber - 1]) != 0)
                 {
-                    ret.Add(pos);
+                    //list.Add(baseVal + bitNumber);
                 }
-                pos--;
-                mask = mask << 1;
+
+                bitNumber++;
             }
 
-            ret.Reverse();
+            return null;
+        }
+
+        // 60 ms
+        public static List<short> GetOnePositionsV4(this long l, List<int> list, int baseVal)
+        {
+            long[] masks = LongMasks.Instance.Masks;
+            //short bitNumber = 1;
+            //long mask = masks[bitNumber - 1];
+            //while (bitNumber <= 64)
+            //{
+            //    mask = masks[bitNumber - 1];
+            //    if ((l & mask) != 0)
+            //    {
+            //        //list.Add(baseVal + bitNumber);
+            //    }
+
+            //    bitNumber++;
+            //}
+
+            return null;
+        }
+        
+        // 23 ms
+        public static List<short> GetOnePositionsV3(this long l, List<int> list, int baseVal)
+        {
+            //long[] masks = LongMasks.Instance.Masks;
+            //short bitNumber = 1;
+            //long mask = masks[bitNumber - 1];
+            //while (bitNumber <= 64)
+            //{
+            //    mask = masks[bitNumber - 1];
+            //    if ((l & mask) != 0)
+            //    {
+            //        //list.Add(baseVal + bitNumber);
+            //    }
+
+            //    bitNumber++;
+            //}
+
+            return null;
+        }
+
+        public static List<short> GetOnePositionsV2(this long l)
+        {
+            List<short> ret = new List<short>();
+            long[] masks = LongMasks.Instance.Masks;
+            short bitNumber = 1;
+            while (bitNumber <= 64)
+            {
+                long mask = masks[bitNumber - 1];
+                if ((l & mask) != 0)
+                {
+                    ret.Add(bitNumber);
+                }
+
+                bitNumber++;
+            }
+
+            return ret;
+        }
+
+        public static List<short> GetOnePositionsV1(this long l)
+        {
+            List<short> ret = new List<short>();
+            var ins = LongMasks.Instance;
+            short bitNumber = 1;
+            while (bitNumber <= 64)
+            {
+                long mask = ins.Masks[bitNumber - 1];
+                if ((l & mask) != 0)
+                {
+                    ret.Add(bitNumber);
+                }
+
+                bitNumber++;
+            }
+
             return ret;
         }
 

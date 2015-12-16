@@ -9,7 +9,7 @@
 
 var host = window.location.host;
 var baseURLOfHomeController = "http://" + host + "/api";
-function func() {
+function func1() {
     var input = document.getElementById("searchText").nodeValue;
     var highlighter = new MatchHighlighter(input);
 }

@@ -13,73 +13,13 @@
         </ul>
     </div>
     <div id="suggestionsCallTimeTaken"></div>
+    <div>
+        <p id="perfData">
+
+        </p>
+    </div>
 </div>
-<script type="text/javascript">
-    var host = window.location.host;
-    var baseURLOfHomeController = "http://" + host + "/api";
-    var startTime;
-    var timeTaken;
-    function func(event)
-    {
-        var input = document.getElementById("word").value;
-        var key = event.which || event.keyCode;
-        var xmlhttp = new XMLHttpRequest();
-        if (key == 13)
-        {
-            showMeaning(input);
-        }
-        else if (input.length > 2)
-        {
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4) {
-                    if (xmlhttp.status == 200) {
-                        timeTaken = (new Date()).getTime() - startTime;
-                        var jsList = JSON.parse(xmlhttp.responseText);
-                        var html = "";
-                        for (var i = 0; i < jsList.length; i++) {
-                            html += "<li><a onclick=\"showMeaning('" + jsList[i] + "')\">" + jsList[i] + "</a></li>";
-                        }
-                        document.getElementById("suggestionsList").innerHTML = html;
-                        document.getElementById("suggestionsList").style.visibility = "visible";
-                        document.getElementById("suggestionsCallTimeTaken").innerHTML = "Time taken by last suggestions call: " + timeTaken;
-                    }
-                }
-            }
-
-            xmlhttp.open("GET", baseURLOfHomeController + "/suggestions?word=" + input + "&timestamp=" + (new Date()).getTime(), true);
-            startTime = (new Date()).getTime();
-            xmlhttp.send();
-        }
-        else
-        {
-            document.getElementById("suggestionsList").style.visibility = "hidden";
-        }
-    }
-
-    function showMeaning(word)
-    {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("suggestionsList").style.visibility = "hidden";
-                var html = singleWordToCamelCase(word) + ": " + xmlhttp.responseText;
-                document.getElementById("lastlookup").innerHTML = html;
-            }
-        }
-
-        var url = baseURLOfHomeController + "/meaning?word=" + word + "&timestamp=" + (new Date()).getTime();
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-
-    function singleWordToCamelCase(word)
-    {
-        var length = word.length;
-        var firstChar = word.charAt(0);
-        return firstChar.toUpperCase() + word.substr(1, length - 1);
-    }
-
-</script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/EnglishDictionary.js")"></script>
 <!--div class="jumbotron">
     <h1>ASP.NET</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>

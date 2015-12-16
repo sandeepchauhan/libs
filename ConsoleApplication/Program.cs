@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using Learning.Libs.ExtensionMethods;
 using ProblemSolutions;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace DictionaryConsoleApp
 {
@@ -17,9 +19,6 @@ namespace DictionaryConsoleApp
         static void Main(string[] args)
         {
             //ElasticSearch.ExecuteScenario();
-            var longs = UtilityMethods.GenerateRandomLongs(1 << 20);
-            var list = longs.Select(a => a.ToString());
-            File.WriteAllLines(@"D:\gitrepos\myrepos\resources\RandomLongs4.txt", list);
             Console.ReadKey();
         }
     }

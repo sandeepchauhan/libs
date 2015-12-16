@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DictionaryConsoleApp
+namespace ApplicationModels
 {
     public class TrieDictionary
     {
@@ -61,6 +61,18 @@ namespace DictionaryConsoleApp
             }
 
             return ret;
+        }
+
+        public Tuple<IEnumerable<string>, FunctionPerfData> GetCorrections(string word)
+        {
+            List<string> ret = new List<string>();
+            var x = _trie.GetCorrections(word);
+            foreach (int i in x.Item1)
+            {
+                ret.Add(_wordMeanings[i].Item1);
+            }
+
+            return new Tuple<IEnumerable<string>,FunctionPerfData>(ret.AsEnumerable(), x.Item2);
         }
 
         public string Stats()
