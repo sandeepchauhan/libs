@@ -39,6 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BankTransaction.cs" />
+    <Compile Include="BankTransactionInstrumentType.cs" />
+    <Compile Include="BankTransactionType.cs" />
+    <Compile Include="ICICICCStmtParser.cs" />
     <Compile Include="StringHashFuncsPerf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

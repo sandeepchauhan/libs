@@ -1,0 +1,14 @@
+﻿<div id="context">
+    <input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown'" />
+    <input type="text" data-bind="value: lastName, valueUpdate: 'afterkeydown'" />
+    <div>
+        Output:
+        <span data-bind="text: firstName"></span>
+        <span data-bind="text: lastName"></span>
+    </div>
+    <button data-bind="click: changeName">Change Name</button>
+</div>
+@section Scripts{
+    <script src="~/Scripts/knockout-3.4.0.js"></script>
+    <script src="~/Scripts/tsfile.js"></script>
+}

@@ -48,12 +48,12 @@ namespace Learning.Libs.DataStructures
 
         public IEnumerable<int> FindWord(string word)
         {
+            word = word.ToLowerInvariant();
             List<int> retVal = new List<int>();
             if (_rootNode != null)
             {
                 Node currNode = _rootNode;
-                char[] arr = word.ToArray();
-                foreach (char c in arr)
+                foreach (char c in word)
                 {
                     if (currNode.childNodes == null)
                     {
@@ -61,8 +61,7 @@ namespace Learning.Libs.DataStructures
                         break;
                     }
 
-                    char lowerCaseChar = Char.ToLowerInvariant(c);
-                    int index = lowerCaseChar - 'a';
+                    int index = c - 'a';
                     if (currNode.childNodes[index] == null)
                     {
                         currNode = null;
@@ -146,7 +145,7 @@ namespace Learning.Libs.DataStructures
             HashSet<int> ret = new HashSet<int>();
             Stopwatch sws = new Stopwatch();
             sws.Start();
-            List<string> candidates = GetCorrectionsWithEditDistanceOne(word).ToList();
+            List<CandidateWord> candidates = GetCorrectionsWithEditDistanceOne(new CandidateWord(word, 0)).ToList();
             sws.Stop();
             stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
             stagePerfData.OtherData.Add("Num Actual Candidates", candidates.Count);
@@ -154,11 +153,12 @@ namespace Learning.Libs.DataStructures
             stagePerfData.OtherData.Add("Num Candidates by Formula", (52 * word.Length + 25));
             #endregion
             #region Get corrections with edit distance 2
-            sws.Restart();
+            sws = new Stopwatch();
+            sws.Start();
             stagePerfData = new FunctionPerfData();
             fpd.StagesPerfData.Add("GetCandidates2", stagePerfData);
-            List<string> copy = new List<string>(candidates);
-            foreach (string c in copy)
+            List<CandidateWord> copy = new List<CandidateWord>(candidates);
+            foreach (CandidateWord c in copy)
             {
                 candidates.AddRange(GetCorrectionsWithEditDistanceOne(c));
             }
@@ -168,16 +168,22 @@ namespace Learning.Libs.DataStructures
             stagePerfData.OtherData.Add("Num Candidates Formula", "(52N + 25)(52N + 25)");
             stagePerfData.OtherData.Add("Num Candidates by Formula", (52 * word.Length + 25) * (52 * word.Length + 25));
             #endregion
+            
             #region Get unique candidates
-            sws.Restart();
+            sws = new Stopwatch();
+            sws.Start();
             stagePerfData = new FunctionPerfData();
             fpd.StagesPerfData.Add("GetCandidatesUnique", stagePerfData);
-            HashSet<string> hs = new HashSet<string>(candidates);
+            //HashSet<string> hs = new HashSet<string>(candidates.Select(x => x.Word));
+            IEnumerable<string> hs = candidates.Select(x => x.Word).Distinct();
+            stagePerfData.OtherData.Add("Unique Candidates", hs.Count());
+            sws.Stop();
             stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
-            stagePerfData.OtherData.Add("Unique Candidates", hs.Count);
             #endregion
+            
             #region Filter valid candidates
-            sws.Restart();
+            sws = new Stopwatch();
+            sws.Start();
             stagePerfData = new FunctionPerfData();
             fpd.StagesPerfData.Add("FilterValidCandidates", stagePerfData);
             foreach(string c in hs)
@@ -188,6 +194,7 @@ namespace Learning.Libs.DataStructures
                     ret.Add(positions.First());
                 }
             }
+            sws.Stop();
             stagePerfData.TimeTaken = sws.ElapsedMilliseconds;
             #endregion
 
@@ -196,42 +203,42 @@ namespace Learning.Libs.DataStructures
         }
 
         // Assuming N as word length. Output can contain upto (26(N+1) - N + 25N + N + (N-1)) = 52N + 25 words.
-        private HashSet<string> GetCorrectionsWithEditDistanceOne(string word)
+        private HashSet<CandidateWord> GetCorrectionsWithEditDistanceOne(CandidateWord word)
         {
-            HashSet<string> ret = new HashSet<string>();
-            for (int i = 0; i <= word.Length; i++)
+            HashSet<CandidateWord> ret = new HashSet<CandidateWord>();
+            for (int i = word.StartIndex; i <= word.Word.Length; i++)
             {
                 // Insertions
                 foreach(char c in Constants.EnglishAlphabet)
                 {
-                    ret.Add(word.Insert(i, c + ""));
+                    ret.Add(new CandidateWord(word.Word.Insert(i, c + ""), i+1));
                 }
                 // Replacements
-                if (i != word.Length)
+                if (i != word.Word.Length)
                 {
-                    char[] arr = word.ToCharArray();
+                    char[] arr = word.Word.ToCharArray();
                     foreach (char c in Constants.EnglishAlphabet)
                     {
-                        if (c != word[i])
+                        if (c != word.Word[i])
                         {
                             arr[i] = c;
-                            ret.Add(new string(arr));
+                            ret.Add(new CandidateWord(new string(arr), i+1));
                         }
                     }
                 }
                 // Deletions
-                if (i != word.Length)
+                if (i != word.Word.Length)
                 {
-                    ret.Add(word.Remove(i, 1));
+                    ret.Add(new CandidateWord(word.Word.Remove(i, 1), i));
                 }
                 // Transposes
-                if (i < word.Length - 1)
+                if (i < word.Word.Length - 1)
                 {
-                    char[] arr = word.ToCharArray();
+                    char[] arr = word.Word.ToCharArray();
                     char tmp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = tmp;
-                    ret.Add(new string(arr));
+                    ret.Add(new CandidateWord(new string(arr), 0));
                 }
             }
 
@@ -289,6 +296,34 @@ namespace Learning.Libs.DataStructures
             stats += "\n" + "Number of words: " + GetNumWords();
             stats += "\n" + "Number of nodes: " + GetNumNodes();
             return stats;
+        }
+
+        private class CandidateWord
+        {
+            public string Word { get; set; }
+
+            public int StartIndex { get; set; }
+
+            public CandidateWord(string w, int i)
+            {
+                this.Word = w;
+                this.StartIndex = i;
+            }
+
+            public override int GetHashCode()
+            {
+                return Word.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj != null && (obj is CandidateWord))
+                {
+                    return Word.Equals((obj as CandidateWord).Word);
+                }
+
+                return false;
+            }
         }
     }
 }
